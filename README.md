@@ -13,7 +13,7 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
 - **Supervised Learning** (*LSTM*) approach described in [1].
 
-- **Reinforcement Learning** (*DQN* and *AlphaZero (MCTS)*) approach described in [2].
+- **Reinforcement Learning** (*Alpha Zero (MCTS)*) approach described in [2].
 
 - **Supervised Learning** (*GNN*) + **Reinforcement Learning** (*DQN*) approach described in [3].
 
