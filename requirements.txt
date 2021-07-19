@@ -1,15 +1,9 @@
-Pillow
-PyYAML
 gym
 numpy
-pycosat
 scipy
-setuptools
-sklearn
 split-folders
 tensorboardX
 tensorflow
-tensorflow-addons
 torch==1.9.0
 torch-geometric
 tqdm
