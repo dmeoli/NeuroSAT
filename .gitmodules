@@ -1,9 +1,9 @@
 [submodule "NeuroSAT"]
 	path = NeuroSAT
 	url = https://github.com/dmeoli/NeuroSAT
-[submodule "SATGame"]
-	path = SATGame
-	url = https://github.com/dmeoli/SATGame
+[submodule "AlphaZeroSAT"]
+	path = AlphaZeroSAT
+	url = https://github.com/dmeoli/AlphaZeroSAT
 [submodule "GraphQSAT"]
 	path = GraphQSAT
 	url = https://github.com/dmeoli/GraphQSAT
