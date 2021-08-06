@@ -11,7 +11,7 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
 ## Contents
 
-- **Supervised Learning** (*LSTM*) approach described in [1].
+- **Supervised Learning** (*MPNN*) approach described in [1].
 
 - **Reinforcement Learning** (*Alpha Zero (MCTS)*) approach described in [2].
 
