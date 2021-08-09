@@ -17,12 +17,11 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
 - **Supervised Learning** (*GNN*) + **Reinforcement Learning** (*DQN*) approach described in [3].
 
-    - [ ] *Graph Convolutional Layer* + *Graph Pooling Layer* (e.g., [*PyTorch Geometric Pooling
-      Methods*](https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#pooling-layers) (e.g.,
+    - [ ] [*Graph Convolutional Layer*](https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#convolutional-layers) + [*Graph Pooling Layer*](https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#pooling-layers) (e.g., 
       [*Hierarchical Graph Representation Learning with Differentiable Pooling
       (DiffPool)*](https://arxiv.org/abs/1806.08804),
       [*Self-Attention Graph Pooling (SAGPool)*](https://arxiv.org/abs/1904.08082),
-      [*MinCUT Pooling*](https://arxiv.org/abs/1907.00481), etc.),
+      [*MinCUT Pooling*](https://arxiv.org/abs/1907.00481),
       [*Hierarchical Graph Pooling*](https://arxiv.org/abs/1911.05954),
       [*K-Plex Cover Pooling*](https://openreview.net/forum?id=PFdGijb9sjx))
     - [ ] *Graph Attention Mechanism* (e.g.,
