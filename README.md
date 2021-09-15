@@ -13,7 +13,8 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
 - **Reinforcement Learning** (*Alpha Zero (MCTS)*) approach described in [1].
 
-- **Supervised Learning** (*GNN*) + **Reinforcement Learning** (*DQN*) approach described in [2].
+- **Supervised Learning** (*[GNN](https://arxiv.org/abs/1806.01261)*) + 
+  **Reinforcement Learning** (*DQN*) approach described in [2].
 
     - [ ] [*Graph Convolutional Layer*](
       https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#convolutional-layers) +
