@@ -11,11 +11,9 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
 ## Contents
 
-- **Supervised Learning** (*MPNN*) approach described in [1].
+- **Reinforcement Learning** (*Alpha Zero (MCTS)*) approach described in [1].
 
-- **Reinforcement Learning** (*Alpha Zero (MCTS)*) approach described in [2].
-
-- **Supervised Learning** (*GNN*) + **Reinforcement Learning** (*DQN*) approach described in [3].
+- **Supervised Learning** (*GNN*) + **Reinforcement Learning** (*DQN*) approach described in [2].
 
     - [ ] [*Graph Convolutional Layer*](
       https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#convolutional-layers) +
@@ -40,10 +38,8 @@ This software is released under the MIT License. See the [LICENSE](LICENSE) file
 
 ## References
 
-[1] Selsam, Daniel, et al., [*Learning a SAT Solver from Single-Bit Supervision*](https://arxiv.org/abs/1802.03685).
-
 [1] Wang, Fei, and Tiark Rompf, [*From Gameplay to Symbolic Reasoning: Learning SAT Solver Heuristics in the Style of
 Alpha(Go) Zero*](https://arxiv.org/abs/1802.05340).
 
-[1] Kurin, Vitaly, et al., [*Can Q-Learning with Graph Networks Learn a Generalizable Branching Heuristic for a SAT
+[2] Kurin, Vitaly, et al., [*Can Q-Learning with Graph Networks Learn a Generalizable Branching Heuristic for a SAT
 Solver?*](https://arxiv.org/abs/1909.11830).
