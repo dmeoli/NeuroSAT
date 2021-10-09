@@ -15,8 +15,7 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
 - **Supervised Learning** (*[GNN](https://arxiv.org/abs/1806.01261)*) + 
   **Reinforcement Learning** (*DQN*) approach described in [2].
-    - [ ] *Graph Attention Mechanism* (i.e.,
-      [*Graph Attention Networks (GATs)*](https://arxiv.org/abs/1710.10903))
+    - [x] [*Graph Attention Networks (GATs)*](https://arxiv.org/abs/1710.10903)
 
 ## Split dataset
 
