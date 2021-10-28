@@ -1,6 +1,6 @@
 # NeuroSAT
 
-[![Open in Colab](https://img.shields.io/badge/Open_in_Colab-NeuroSAT-yellow.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/NeuroSAT.ipynb)
+[![Open in Colab](https://img.shields.io/badge/Open_in_Colab-NeuroSAT-blue.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/NeuroSAT.ipynb)
 [![Open in Colab](https://img.shields.io/badge/Open_in_Colab-GATGraphQSAT-blue.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/GATGraphQSAT.ipynb)
 
 <!---
