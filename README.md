@@ -1,7 +1,12 @@
-# neuroSAT
+# NeuroSAT
 
-[![NeuroSAT - Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/NeuroSAT.ipynb)
-[![GATGraphQSAT - Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/GATGraphQSAT.ipynb)
+[![Open in Colab](https://img.shields.io/badge/Open_in_Colab-NeuroSAT-yellow.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/NeuroSAT.ipynb)
+[![Open in Colab](https://img.shields.io/badge/Open_in_Colab-GATGraphQSAT-blue.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/GATGraphQSAT.ipynb)
+
+<!---
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/NeuroSAT.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/GATGraphQSAT.ipynb)
+-->
 
 Neuro-symbolic approaches to the SAT problem.
 
@@ -14,7 +19,7 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
 - **Reinforcement Learning** (*Alpha Zero (MCTS)*) approach described in [1].
 
-- **Supervised Learning** (*[GNN](https://arxiv.org/abs/1806.01261)*) + 
+- **Supervised Learning** (*[GNN](https://arxiv.org/abs/1806.01261)*) +
   **Reinforcement Learning** (*DQN*) approach described in [2].
     - [x] [*Graph Attention Networks (GATs)*](https://arxiv.org/abs/1710.10903)
 
