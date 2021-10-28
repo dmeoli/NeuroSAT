@@ -1,6 +1,7 @@
 # neuroSAT
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/NeuroSAT.ipynb)
+[![NeuroSAT - Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/NeuroSAT.ipynb)
+[![GATGraphQSAT - Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/GATGraphQSAT.ipynb)
 
 Neuro-symbolic approaches to the SAT problem.
 
