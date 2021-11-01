@@ -5,8 +5,9 @@ scipy
 split-folders
 tensorboardX
 tensorflow
-torch==1.10.0
-torch-geometric
---find-links https://pytorch-geometric.com/whl/torch-1.10.0+cu113.html
+--find-links https://download.pytorch.org/whl/cu113/torch_stable.html
+torch==1.10.0+cu113
+--find-links https://data.pyg.org/whl/torch-1.10.0+cu113.html
 torch-sparse
 torch-scatter
+torch-geometric
