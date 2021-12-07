@@ -22,7 +22,7 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
 ## Split dataset
 
-```./train_val_test_split.sh {uniform-random-3-sat | graph-coloring | etc.}```
+```./train_val_test_split.sh {uniform-random-3-sat | graph-coloring}```
 
 ## License [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
