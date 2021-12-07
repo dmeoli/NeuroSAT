@@ -45,12 +45,4 @@ elif [ "$PROBLEM_TYPE" = "graph-coloring" ]; then
   rm -r data/"$PROBLEM_TYPE"/test/flat175-417
   rm -r data/"$PROBLEM_TYPE"/test/flat200-479
   
-  cp -r data/"$PROBLEM_TYPE"/flat30-60 data/"$PROBLEM_TYPE"/test
-  cp -r data/"$PROBLEM_TYPE"/flat75-180 data/"$PROBLEM_TYPE"/test
-  cp -r data/"$PROBLEM_TYPE"/flat100-239 data/"$PROBLEM_TYPE"/test
-  cp -r data/"$PROBLEM_TYPE"/flat125-301 data/"$PROBLEM_TYPE"/test
-  cp -r data/"$PROBLEM_TYPE"/flat150-360 data/"$PROBLEM_TYPE"/test
-  cp -r data/"$PROBLEM_TYPE"/flat175-417 data/"$PROBLEM_TYPE"/test
-  cp -r data/"$PROBLEM_TYPE"/flat200-479 data/"$PROBLEM_TYPE"/test
-  
 fi
