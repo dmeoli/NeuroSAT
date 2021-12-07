@@ -20,6 +20,10 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
   **Reinforcement Learning** (*DQN*) approach described in [2].
     - [x] [*Graph Attention Networks (GATs)*](https://arxiv.org/abs/1710.10903)
 
+## Split dataset
+
+```./train_val_test_split.sh {uniform-random-3-sat | graph-coloring | etc.}```
+
 ## License [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This software is released under the MIT License. See the [LICENSE](LICENSE) file for details.
