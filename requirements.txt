@@ -1,4 +1,4 @@
-gym
+gym==0.20.0
 numpy
 PyYAML
 scipy
