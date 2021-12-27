@@ -20,9 +20,9 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
   **Reinforcement Learning** (*DQN*) approach described in [2].
     - [x] [*Graph Attention Networks (GATs)*](https://arxiv.org/abs/1710.10903)
   
-  The experimental results of *GraphQSAT* and *GATQSAT* models can be viewed [here](https://docs.google.com/spreadsheets/d/1j0gQxsOPizNu8hm-nM1YY8bsdpbmWxYGVotj4h5d-wU/edit?usp=drivesdk).
+  The experimental results of *GraphQSAT* and *GATQSAT* models can be viewed [here](https://docs.google.com/spreadsheets/d/1j0gQxsOPizNu8hm-nM1YY8bsdpbmWxYGVotj4h5d-wU).
 
-The final presentation of the course project can be found [here](https://docs.google.com/presentation/d/1CYuQM2ykMhLh5nuKg8IaPq6D0r0jOkCQ46vWq4PCci0/edit?usp=drivesdk).
+The final presentation of the course project can be found [here](https://docs.google.com/presentation/d/1rmFL_RhLS2fjGHb9SM14qdb7o3Oh0iOSlqirF0OQaX8).
 
 ## Split dataset
 
