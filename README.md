@@ -16,13 +16,18 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
 - **Reinforcement Learning** (*Alpha Zero (MCTS)*) approach described in [1].
 
-- **Supervised Learning** (*[GNN](https://arxiv.org/abs/1806.01261)*) +
-  **Reinforcement Learning** (*DQN*) approach described in [2].
-    - [x] [*Graph Attention Networks (GATs)*](https://arxiv.org/abs/1710.10903)
-  
-  The experimental results of *GraphQSAT* and *GATQSAT* models can be viewed [here](https://docs.google.com/spreadsheets/d/1j0gQxsOPizNu8hm-nM1YY8bsdpbmWxYGVotj4h5d-wU).
+    - **Supervised Learning** (*[GNN](https://arxiv.org/abs/1806.01261)*) +
+      **Reinforcement Learning** (*DQN*) approach described in [2].
+        - [x] [*Graph Attention Networks (GATs)*](https://arxiv.org/abs/1710.10903)
 
-The final presentation of the course project can be found [here](https://docs.google.com/presentation/d/1rmFL_RhLS2fjGHb9SM14qdb7o3Oh0iOSlqirF0OQaX8).
+      The experimental results of *GraphQSAT* and *GATQSAT* models can be
+      viewed [here](https://docs.google.com/spreadsheets/d/1j0gQxsOPizNu8hm-nM1YY8bsdpbmWxYGVotj4h5d-wU).
+
+| ![graphqsat_flat50115](https://docs.google.com/spreadsheets/d/e/2PACX-1vRI3xXW1Hxt7qitKVTIp_H2TLm2ABzE-MdvxbV8_Mz71FchFjPwqbVsQV14Bu6ceh7d4FEvAOk4HPWH/pubchart?oid=1777170439&format=image) | ![gatqsat_flat50115](https://docs.google.com/spreadsheets/d/e/2PACX-1vRI3xXW1Hxt7qitKVTIp_H2TLm2ABzE-MdvxbV8_Mz71FchFjPwqbVsQV14Bu6ceh7d4FEvAOk4HPWH/pubchart?oid=782668130&format=image) |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+The final presentation of the course project can be
+found [here](https://docs.google.com/presentation/d/1rmFL_RhLS2fjGHb9SM14qdb7o3Oh0iOSlqirF0OQaX8).
 
 ## Split dataset
 
