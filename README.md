@@ -19,6 +19,10 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 - **Supervised Learning** (*[GNN](https://arxiv.org/abs/1806.01261)*) +
   **Reinforcement Learning** (*DQN*) approach described in [2].
     - [x] [*Graph Attention Networks (GATs)*](https://arxiv.org/abs/1710.10903)
+  
+  The experimental results of *GraphQSAT* and *GATQSAT* models can be viewed [here](https://docs.google.com/spreadsheets/d/1j0gQxsOPizNu8hm-nM1YY8bsdpbmWxYGVotj4h5d-wU/edit?usp=drivesdk).
+
+The final presentation of the course project can be found [here](https://docs.google.com/presentation/d/1CYuQM2ykMhLh5nuKg8IaPq6D0r0jOkCQ46vWq4PCci0/edit?usp=drivesdk).
 
 ## Split dataset
 
