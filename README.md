@@ -26,8 +26,9 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
   The experimental results of *GraphQSAT* and *GATQSAT* models can be
   viewed [here](https://docs.google.com/spreadsheets/d/1j0gQxsOPizNu8hm-nM1YY8bsdpbmWxYGVotj4h5d-wU).
 
-  | <img src="./img/graphqsat.png"> | <img src="./img/gatqsat.png">   |
-  |---------------------------------|---------------------------------|
+  | <img src="./img/graphqsat.png"> |
+  |---------------------------------|
+  | <img src="./img/gatqsat.png">   |
 
 The final presentation of the course project can be
 found [here](https://docs.google.com/presentation/d/1rmFL_RhLS2fjGHb9SM14qdb7o3Oh0iOSlqirF0OQaX8).
