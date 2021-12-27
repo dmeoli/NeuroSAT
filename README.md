@@ -16,8 +16,6 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
 - **Reinforcement Learning** (*Alpha Zero (MCTS)*) approach described in [1].
 
-    - [ ] experiments
-
 - **Supervised Learning** (*[GNN](https://arxiv.org/abs/1806.01261)*) +
   **Reinforcement Learning** (*DQN*) approach described in [2].
 
