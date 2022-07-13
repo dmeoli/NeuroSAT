@@ -31,9 +31,21 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 The final presentation of the course project can be
 found [here](https://docs.google.com/presentation/d/1rmFL_RhLS2fjGHb9SM14qdb7o3Oh0iOSlqirF0OQaX8).
 
-## Split dataset
+## Getting the code
 
-```bash train_val_test_split.sh {uniform-random-3-sat | graph-coloring}```
+Getting the whole project and all the subprojects updated at the latest version can be done with:
+
+```sh
+git clone --recurse-submodules https://gitlab.com/smspp/neuroSAT.git
+git submodule foreach --recursive "git checkout master"
+git submodule foreach --recursive "git pull"
+```
+
+## Split datasets
+
+```sh
+bash train_val_test_split.sh {uniform-random-3-sat | graph-coloring}
+```
 
 ## License [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
