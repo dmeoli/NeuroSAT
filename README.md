@@ -1,111 +1,130 @@
 # NeuroSAT
 
-[![Open in Colab](https://img.shields.io/static/v1.svg?logo=google-colab&label=GraphQSAT&message=Open%20In%20Colab&color=blue)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/GraphQSAT.ipynb)
-[![Open in Colab](https://img.shields.io/static/v1.svg?logo=google-colab&label=GATQSAT&message=Open%20In%20Colab&color=blue)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/GATQSAT.ipynb)
+[![Reproduce GQSAT](https://img.shields.io/static/v1.svg?logo=google-colab&label=reproduce&message=GQSAT%20results&color=blue)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/reproduce_gqsat.ipynb)
+[![Train on GPU](https://img.shields.io/static/v1.svg?logo=google-colab&label=train&message=on%20GPU&color=blue)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/train_colab.ipynb)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![Open in Colab](https://img.shields.io/static/v1.svg?logo=google-colab&label=AlphaZeroSAT&message=Open%20In%20Colab&color=blue)](https://colab.research.google.com/github/dmeoli/neuro-sat/blob/master/AlphaZeroSAT.ipynb)
+**Neuro-symbolic approaches to the SAT problem** — learning branching heuristics
+for a Boolean SAT solver with reinforcement learning, CNNs and Graph Neural
+Networks.
 
-Neuro-symbolic approaches to the SAT problem.
+Developed for the Pattern Recognition and Reinforcement Learning courses @
+[Department of Computer Science](https://www.di.unipi.it/en/),
+[University of Pisa](https://www.unipi.it/index.php/english), under the
+supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/). The
+original implementations (TensorFlow 1.x, GSL, pinned legacy libraries) have been
+**ported to a single, self-contained, latest-version PyTorch stack** and the
+published results are **reproduced exactly**.
 
-This code has been developed in the context of Pattern Recognition and Reinforcement Learning courses @
-[Department of Computer Science](https://www.di.unipi.it/en/)
-@ [University of Pisa](https://www.unipi.it/index.php/english)
-under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/).
+## Approaches
 
-## Contents
+| Model | Method | Framework | Where |
+|-------|--------|-----------|-------|
+| **AlphaZeroSAT** | Alpha(Go)Zero + MCTS over a CNN policy/value net [1] | PyTorch | [`AlphaZeroSAT/`](AlphaZeroSAT) |
+| **Graph-Q-SAT** | DQN + Graph Neural Network ([GNN](https://arxiv.org/abs/1806.01261)) [2] | PyTorch + PyG | [`GQSAT/`](GQSAT) |
+| **GAT-Q-SAT** | Graph-Q-SAT + [Graph Attention](https://arxiv.org/abs/1710.10903) (this project) | PyTorch + PyG | [`GQSAT/`](GQSAT) |
 
-- **Reinforcement Learning** (*Alpha Zero (MCTS)*) approach described in [1].
+**Key finding:** graph attention (GAT-Q-SAT) helps on *structured* problems
+(graph colouring), while plain Graph-Q-SAT is stronger on uniform-random 3-SAT.
 
-- **Supervised Learning** (*[GNN](https://arxiv.org/abs/1806.01261)*) +
-  **Reinforcement Learning** (*DQN*) approach described in [2].
+| Graph-Q-SAT | GAT-Q-SAT |
+|:-:|:-:|
+| <img src="./img/graphqsat.png" width="420"> | <img src="./img/gatqsat.png" width="420"> |
 
-    - [x] [*Graph Attention Networks (GATs)*](https://arxiv.org/abs/1710.10903)
+## Repository layout
 
-  The experimental results of *GraphQSAT* and *GATQSAT* models are generated
-  directly from the evaluation logs (`GQSAT/runs/*/*.tsv`) into in-repo tables,
-  so they always stay in sync with the runs (no more manual Google Sheets):
-
-  ```sh
-  cd GQSAT && python3 aggregate_results.py   # writes results/summary.csv + results/mrir_<model>.md
-  cd GQSAT && python3 make_plots.py          # regenerates img/*.png (MRIR, time, random) from the logs
-  ```
-
-  See [`GQSAT/results/mrir_gatqsat.md`](GQSAT/results/mrir_gatqsat.md) and
-  [`GQSAT/results/mrir_graphqsat.md`](GQSAT/results/mrir_graphqsat.md). The
-  legacy spreadsheet is kept for reference
-  [here](https://docs.google.com/spreadsheets/d/1j0gQxsOPizNu8hm-nM1YY8bsdpbmWxYGVotj4h5d-wU).
-
-  | <img src="./img/graphqsat.png"> |
-  |---------------------------------|
-  | <img src="./img/gatqsat.png">   |
-
-The final presentation and the written report are versioned in the repo as LaTeX:
-[`slides/neurosat-slides.tex`](slides/neurosat-slides.tex) (Beamer) and
-[`report/neurosat.tex`](report/neurosat.tex) (both build to PDF with `pdflatex`).
+```
+neuroSAT/
+├── AlphaZeroSAT/       # Alpha(Go)Zero + MCTS (PyTorch) — submodule
+│   ├── models_torch.py        # CNN policy/value nets
+│   ├── alphazero_torch.py     # AZTrainer (AlphaZero loss + Adam)
+│   ├── train_torch.py         # self-play + supervised training driver
+│   ├── mct.py, sl_buffer_d.py # MCTS glue + replay buffer
+│   ├── MCTSminisat/           # MCTS-aware MiniSat env (GSL-free, build_so.sh)
+│   ├── data/                  # uf20-91 instances
+│   └── runs/                  # trained models
+├── GQSAT/              # Graph-Q-SAT / GAT-Q-SAT (DQN + GNN) — submodule
+│   ├── gqsat/                 # models, learners, agents, buffer, utils
+│   ├── minisat/               # patched MiniSat + gym env (submodule)
+│   ├── dqn.py, evaluate.py    # training / evaluation
+│   ├── aggregate_results.py   # runs/*.tsv -> results/*.md + summary.csv
+│   ├── make_plots.py          # runs/*.tsv -> img/*.png
+│   └── runs/                  # trained checkpoints + evaluation logs (.tsv)
+├── notebooks/          # reproduce_gqsat.ipynb, train_colab.ipynb (Colab)
+├── data/               # SAT datasets (uniform-random-3-sat, graph-coloring)
+├── img/                # result plots (regenerated by make_plots.py)
+├── papers/             # reference PDFs (see papers/README.md)
+├── report/             # LaTeX written report  (pdflatex report/neurosat.tex)
+├── slides/             # LaTeX Beamer slides   (pdflatex slides/neurosat-slides.tex)
+└── requirements.txt
+```
 
 ## Getting the code
 
-Getting the whole project and all the subprojects updated at the latest version can be done with:
-
 ```sh
-git clone --recurse-submodules https://gitlab.com/smspp/neuroSAT.git
-git submodule foreach --recursive "git checkout master"
-git submodule foreach --recursive "git pull"
+git clone --recurse-submodules https://github.com/dmeoli/NeuroSAT.git
 ```
 
-## Split datasets
-
-```sh
-bash train_val_test_split.sh {uniform-random-3-sat | graph-coloring}
-```
-
-## Running GQSAT / GATQSAT locally (modern stack)
+## Environment
 
 The PyTorch models run on a current stack — latest `torch`, `torch-geometric`
-(no more `torch-scatter`/`torch-sparse`), `numpy>=2` and `gymnasium` — and
-reproduce the original results exactly (verified, see below).
+(no `torch-scatter`/`torch-sparse`), `numpy>=2`, `gymnasium`.
 
 ```sh
-# 1. isolated environment + dependencies
-python3 -m venv .venv                 # if venv is unavailable (PEP 668):
-                                      #   python3 -m pip install --target=/tmp/ve virtualenv
-                                      #   PYTHONPATH=/tmp/ve python3 -m virtualenv .venv
+python3 -m venv .venv            # or: pip install virtualenv && python3 -m virtualenv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-
-# 2. build the MiniSat gym extension (_GymSolver.so) for THIS python + numpy
-#    (needs g++, zlib + the python dev headers; swig only if you change GymSolver.i)
-cd GQSAT/minisat
-PYV=python$(python -c 'import sys;print(f"{sys.version_info.major}.{sys.version_info.minor}")')
-make python-wrap PYTHON=$PYV NUMPY_INC="$(python -c 'import numpy; print(numpy.get_include())')"
-cd ../..
 ```
 
-### Reproduce the evaluation results
+Both projects use a native MiniSat gym extension built with `g++`/`zlib`
+(no GSL); build it for your Python + NumPy:
 
 ```sh
-cd GQSAT
-python evaluate.py \
-  --env-name sat-v0 --core-steps -1 --eps-final 0.0 --no_restarts --no-cuda \
-  --test_time_max_decisions_allowed 500 \
-  --eval-problems-paths ../data/graph-coloring/flat30-60 \
-  --model-dir runs/Dec08_08-39-57_e63e47f25457 --model-checkpoint model_50000.chkp
+# Graph-Q-SAT
+cd GQSAT/minisat && make python-wrap \
+    PYTHON=python$(python -c 'import sys;print(f"{sys.version_info.major}.{sys.version_info.minor}")') \
+    NUMPY_INC="$(python -c 'import numpy; print(numpy.get_include())')" && cd ../..
+
+# AlphaZeroSAT
+cd AlphaZeroSAT && PYTHON=python3 bash MCTSminisat/build_so.sh && cd ..
 ```
 
-Drop `--no-cuda` on a GPU machine. The modern stack matches the original numbers
-**exactly** — GraphQSAT on `flat30-60` (cap 500) gives median relative score
-**1.83** (and GAT-Q-SAT **1.67**), identical to the committed
-`runs/*/flat30-60-*-max500.tsv`. Heavy training/eval is best run on Colab via the
-`GraphQSAT.ipynb` / `GATQSAT.ipynb` notebooks.
+## Usage
 
-## License [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+```sh
+# split a dataset into train/val/test
+bash train_val_test_split.sh {uniform-random-3-sat | graph-coloring}
 
-This software is released under the MIT License. See the [LICENSE](LICENSE) file for details.
+# reproduce a Graph-Q-SAT / GAT-Q-SAT evaluation (add --no-cuda on CPU)
+cd GQSAT && python evaluate.py --env-name sat-v0 --core-steps -1 --eps-final 0.0 \
+    --no_restarts --no-cuda --test_time_max_decisions_allowed 500 \
+    --eval-problems-paths ../data/graph-coloring/flat30-60 \
+    --model-dir runs/Dec08_08-39-57_e63e47f25457 --model-checkpoint model_50000.chkp
+
+# regenerate result tables + plots from the logs
+cd GQSAT && python aggregate_results.py && python make_plots.py
+
+# train AlphaZeroSAT (GPU auto-detected)
+cd AlphaZeroSAT && python train_torch.py --train_path data/uf20-91_train_v0 --device auto
+```
+
+Heavy training is best run on a GPU via [`notebooks/train_colab.ipynb`](notebooks/train_colab.ipynb);
+exact reproduction of the published numbers is shown in
+[`notebooks/reproduce_gqsat.ipynb`](notebooks/reproduce_gqsat.ipynb). The
+evaluation tables live in [`GQSAT/results/`](GQSAT/results).
+
+## License
+
+Released under the MIT License — see [LICENSE](LICENSE).
 
 ## References
 
-[1] Wang, Fei, and Tiark Rompf, [*From Gameplay to Symbolic Reasoning: Learning SAT Solver Heuristics in the Style of
-Alpha(Go) Zero*](https://arxiv.org/abs/1802.05340).
+[1] Wang, Fei, and Tiark Rompf, [*From Gameplay to Symbolic Reasoning: Learning SAT
+Solver Heuristics in the Style of Alpha(Go) Zero*](https://arxiv.org/abs/1802.05340).
 
-[2] Kurin, Vitaly, et al., [*Can Q-Learning with Graph Networks Learn a Generalizable Branching Heuristic for a SAT
-Solver?*](https://arxiv.org/abs/1909.11830).
+[2] Kurin, Vitaly, et al., [*Can Q-Learning with Graph Networks Learn a Generalizable
+Branching Heuristic for a SAT Solver?*](https://arxiv.org/abs/1909.11830).
+
+See [`papers/`](papers) for the full reference list (NeuroSAT, NeuroCore,
+NeuroBack, …) and the written [report](report/neurosat.tex) for a discussion of
+how this work relates to the subsequent literature.
