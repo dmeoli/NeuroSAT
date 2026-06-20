@@ -39,8 +39,9 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
   |---------------------------------|
   | <img src="./img/gatqsat.png">   |
 
-The final presentation of the course project can be
-found [here](https://docs.google.com/presentation/d/1rmFL_RhLS2fjGHb9SM14qdb7o3Oh0iOSlqirF0OQaX8).
+The final presentation and the written report are versioned in the repo as LaTeX:
+[`slides/neurosat-slides.tex`](slides/neurosat-slides.tex) (Beamer) and
+[`report/neurosat.tex`](report/neurosat.tex) (both build to PDF with `pdflatex`).
 
 ## Getting the code
 
