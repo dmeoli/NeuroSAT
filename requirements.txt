@@ -11,8 +11,8 @@
 # - GATConv checkpoints from older torch-geometric load via
 #   SATModel.reconcile_gat_lin_keys (lin_src/lin_dst <-> lin remap).
 #
-# AlphaZeroSAT / AlphaZeroGoSAT (TensorFlow) deps live with those subprojects and
-# are handled during their own porting — intentionally not pulled in here.
+# AlphaZeroSAT (the Alpha(Go)Zero model, now PyTorch) lives in its own submodule
+# with its own deps — intentionally not pulled in here.
 numpy
 PyYAML
 scipy
