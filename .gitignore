@@ -9,3 +9,13 @@ __pycache__
 
 GQSAT.gdsheet
 NeuroSAT.gdslides
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# reference PDFs (kept locally, not committed)
+papers/*.pdf
