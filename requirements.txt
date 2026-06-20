@@ -1,13 +1,23 @@
-gym==0.20.0
+# GQSAT / GATQSAT modern stack (PyTorch), targeting the LATEST versions.
+#
+# - torch-scatter / torch-sparse REMOVED: the code now uses
+#   torch_geometric.utils.scatter (branch GQSAT@port/modern), dropping the
+#   hardest-to-install, CUDA/torch-version-locked dependencies.
+# - gymnasium (the maintained successor of gym): the code imports it with a
+#   gym fallback and builds the env directly (bypassing gym.make's env-checker),
+#   so it is independent of the gym/gymnasium API churn.
+# - numpy is UNPINNED (validated on numpy 2.4.x): no torch-scatter ABI lock and
+#   the env is rebuilt against the installed numpy.
+# - GATConv checkpoints from older torch-geometric load via
+#   SATModel.reconcile_gat_lin_keys (lin_src/lin_dst <-> lin remap).
+#
+# AlphaZeroSAT / AlphaZeroGoSAT (TensorFlow) deps live with those subprojects and
+# are handled during their own porting — intentionally not pulled in here.
 numpy
 PyYAML
 scipy
 split-folders
 tensorboardX
-tensorflow
---find-links https://download.pytorch.org/whl/cu113/torch_stable.html
-torch==1.10.0+cu113
---find-links https://data.pyg.org/whl/torch-1.10.0+cu113.html
-torch-scatter
-torch-sparse
+gymnasium
+torch
 torch-geometric

@@ -21,8 +21,18 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
     - [x] [*Graph Attention Networks (GATs)*](https://arxiv.org/abs/1710.10903)
 
-  The experimental results of *GraphQSAT* and *GATQSAT* models can be
-  viewed [here](https://docs.google.com/spreadsheets/d/1j0gQxsOPizNu8hm-nM1YY8bsdpbmWxYGVotj4h5d-wU).
+  The experimental results of *GraphQSAT* and *GATQSAT* models are generated
+  directly from the evaluation logs (`GQSAT/runs/*/*.tsv`) into in-repo tables,
+  so they always stay in sync with the runs (no more manual Google Sheets):
+
+  ```sh
+  cd GQSAT && python3 aggregate_results.py   # writes results/summary.csv + results/mrir_<model>.md
+  ```
+
+  See [`GQSAT/results/mrir_gatqsat.md`](GQSAT/results/mrir_gatqsat.md) and
+  [`GQSAT/results/mrir_graphqsat.md`](GQSAT/results/mrir_graphqsat.md). The
+  legacy spreadsheet is kept for reference
+  [here](https://docs.google.com/spreadsheets/d/1j0gQxsOPizNu8hm-nM1YY8bsdpbmWxYGVotj4h5d-wU).
 
   | <img src="./img/graphqsat.png"> |
   |---------------------------------|
@@ -46,6 +56,45 @@ git submodule foreach --recursive "git pull"
 ```sh
 bash train_val_test_split.sh {uniform-random-3-sat | graph-coloring}
 ```
+
+## Running GQSAT / GATQSAT locally (modern stack)
+
+The PyTorch models run on a current stack — latest `torch`, `torch-geometric`
+(no more `torch-scatter`/`torch-sparse`), `numpy>=2` and `gymnasium` — and
+reproduce the original results exactly (verified, see below).
+
+```sh
+# 1. isolated environment + dependencies
+python3 -m venv .venv                 # if venv is unavailable (PEP 668):
+                                      #   python3 -m pip install --target=/tmp/ve virtualenv
+                                      #   PYTHONPATH=/tmp/ve python3 -m virtualenv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# 2. build the MiniSat gym extension (_GymSolver.so) for THIS python + numpy
+#    (needs g++, zlib + the python dev headers; swig only if you change GymSolver.i)
+cd GQSAT/minisat
+PYV=python$(python -c 'import sys;print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+make python-wrap PYTHON=$PYV NUMPY_INC="$(python -c 'import numpy; print(numpy.get_include())')"
+cd ../..
+```
+
+### Reproduce the evaluation results
+
+```sh
+cd GQSAT
+python evaluate.py \
+  --env-name sat-v0 --core-steps -1 --eps-final 0.0 --no_restarts --no-cuda \
+  --test_time_max_decisions_allowed 500 \
+  --eval-problems-paths ../data/graph-coloring/flat30-60 \
+  --model-dir runs/Dec08_08-39-57_e63e47f25457 --model-checkpoint model_50000.chkp
+```
+
+Drop `--no-cuda` on a GPU machine. The modern stack matches the original numbers
+**exactly** — GraphQSAT on `flat30-60` (cap 500) gives median relative score
+**1.83** (and GAT-Q-SAT **1.67**), identical to the committed
+`runs/*/flat30-60-*-max500.tsv`. Heavy training/eval is best run on Colab via the
+`GraphQSAT.ipynb` / `GATQSAT.ipynb` notebooks.
 
 ## License [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
