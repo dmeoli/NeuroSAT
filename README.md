@@ -27,6 +27,7 @@ under the supervision of prof. [Davide Bacciu](http://pages.di.unipi.it/bacciu/)
 
   ```sh
   cd GQSAT && python3 aggregate_results.py   # writes results/summary.csv + results/mrir_<model>.md
+  cd GQSAT && python3 make_plots.py          # regenerates img/*.png (MRIR, time, random) from the logs
   ```
 
   See [`GQSAT/results/mrir_gatqsat.md`](GQSAT/results/mrir_gatqsat.md) and
