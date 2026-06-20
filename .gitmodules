@@ -4,6 +4,3 @@
 [submodule "GQSAT"]
 	path = GQSAT
 	url = https://github.com/dmeoli/GQSAT
-[submodule "AlphaZeroGoSAT"]
-	path = AlphaZeroGoSAT
-	url = https://github.com/dmeoli/AlphaZeroGoSAT
