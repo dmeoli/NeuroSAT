@@ -7,7 +7,8 @@
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
-\graphicspath{{../img/}}
+\usepackage{booktabs}
+\graphicspath{{../img/}{../img/paper/}}
 
 \definecolor{tan}{RGB}{193,154,107}
 \definecolor{ink}{RGB}{40,40,40}
@@ -19,7 +20,6 @@
 \setbeamerfont{frametitle}{size=\LARGE}
 \setbeamertemplate{frametitle}{\vspace{4mm}\insertframetitle\par}
 
-% section divider with the tan right panel, like the original outline slides
 \newcommand{\sectiondivider}[3]{%
 \begin{frame}[plain]
   \begin{columns}
@@ -38,7 +38,6 @@
 \end{frame}}
 
 \title{\textbf{Neuro-symbolic approaches to the SAT problem}}
-\subtitle{Pattern Recognition \& Reinforcement Learning\\(survey with coding project)}
 \author{Donato Meoli}
 \date{}
 
@@ -47,7 +46,7 @@
 {\setbeamertemplate{footline}{}
 \begin{frame}[plain]
   \vspace{1.2cm}
-  \hfill\begin{minipage}{0.7\textwidth}\raggedleft
+  \hfill\begin{minipage}{0.72\textwidth}\raggedleft
   {\color{tan}\rule{2pt}{2.2cm}}\hspace{3mm}
   \begin{minipage}{0.82\textwidth}\raggedright
     {\Huge Neuro-symbolic\\ approaches to\\ the SAT problem}\\[3mm]
@@ -58,17 +57,29 @@
 \end{frame}}
 
 % ------------------------------------------------------------------ SAT problem
-\begin{frame}{SAT Problem}
+\begin{frame}{The SAT problem}
   \begin{itemize}
-    \item \textbf{SAT}: is there an assignment satisfying a Boolean formula (CNF)?
+    \item \textbf{SAT}: is there an assignment satisfying a Boolean (CNF) formula?
           First problem proven NP-complete; core of verification, planning, synthesis.
     \item Modern solvers are \textbf{CDCL}: decide a variable, unit-propagate, on a
           conflict learn a clause and backtrack.
     \item The \textbf{branching heuristic} (e.g.\ VSIDS) picks the decision variable
-          --- a natural target for machine learning.
-    \item \emph{This project}: survey + implementation of two neuro-symbolic
-          branching approaches, modernised to a single PyTorch stack and
-          reproduced.
+          --- and makes poor choices during its warm-up phase.
+    \item \emph{This project}: learn the branching heuristic with two neuro-symbolic
+          methods, modernise them to PyTorch, reproduce, and study \textbf{where
+          graph attention helps}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Contributions}
+  \begin{itemize}
+    \item Port both methods from \textbf{TensorFlow 1.x + GSL} to one self-contained
+          \textbf{PyTorch / PyTorch-Geometric} stack (latest \texttt{torch}, \texttt{numpy}$\geq$2,
+          \texttt{gymnasium}; no \texttt{torch-scatter}/\texttt{sparse}, no GSL).
+    \item \textbf{Reproduce the published Graph-Q-SAT results exactly} (semantic
+          non-regression oracle).
+    \item \textbf{GAT-Q-SAT}: an attention-augmented variant, with a clean
+          attention-on/off study showing \emph{where} attention helps.
   \end{itemize}
 \end{frame}
 
@@ -76,22 +87,18 @@
 \sectiondivider{NeuroSAT}{%
   \begin{itemize}
     \item NeuroSAT
-    \item Background
-      \begin{itemize}\item Message Passing Neural Networks (MPNNs)\end{itemize}
+    \item Background \begin{itemize}\item Message Passing NNs (MPNNs)\end{itemize}
     \item Model \item Training \item Results
   \end{itemize}}{(ISPR -- survey)\\[2mm]
-  Selsam et al., \emph{Learning a SAT Solver from Single-Bit Supervision}.\\
-  Gilmer et al., \emph{Neural Message Passing for Quantum Chemistry}.}
+  Selsam et al., \emph{Learning a SAT Solver from Single-Bit Supervision}.}
 
-\begin{frame}{NeuroSAT}
+\begin{frame}{NeuroSAT (survey)}
   \begin{itemize}
     \item \textbf{Goal}: can a neural network learn to solve SAT?
-    \item An MPNN trained \emph{only} as a SAT/UNSAT classifier (one-bit
-          supervision) nonetheless learns to find satisfying assignments.
-    \item At test time, for a satisfiable instance the network guesses UNSAT with
-          low confidence until it ``finds'' a solution, then converges to SAT.
-    \item Survey item only --- not implemented here, but the graph view it
-          introduces is the basis of Graph-Q-SAT.
+    \item An MPNN trained \emph{only} as a SAT/UNSAT classifier (one-bit supervision)
+          nonetheless learns to find satisfying assignments.
+    \item Introduces the \textbf{graph view} of a CNF (variable/clause nodes) that
+          underpins Graph-Q-SAT --- our second method.
   \end{itemize}
 \end{frame}
 
@@ -99,48 +106,22 @@
 \sectiondivider{AlphaZeroSAT}{%
   \begin{itemize}
     \item AlphaZeroSAT
-    \item Background
-      \begin{itemize}\item Monte Carlo Tree Search (MCTS)\end{itemize}
+    \item Background \begin{itemize}\item Monte Carlo Tree Search (MCTS)\end{itemize}
     \item Model \item Training \item Results
   \end{itemize}}{(ISPR + RL -- survey with coding)\\[2mm]
-  Wang \& Rompf, \emph{From Gameplay to Symbolic Reasoning: Learning SAT Solver
-  Heuristics in the Style of Alpha(Go) Zero}.}
+  Wang \& Rompf, \emph{From Gameplay to Symbolic Reasoning \dots\ Alpha(Go) Zero}.}
 
-\begin{frame}{AlphaZeroSAT --- Model}
+\begin{frame}{AlphaZeroSAT --- model \& training}
   \begin{itemize}
-    \item \textbf{Goal}: can Alpha(Go)Zero learn a branching heuristic for SAT?
-    \item State: CNF as a fixed-size \textbf{clauses\,$\times$\,variables} matrix,
-          entries encoding literal polarity ($(1,0)$ / $(0,1)$).
-    \item A \textbf{CNN} with a policy head $\pi$ (over $2\,n_{\text{var}}$ actions)
-          and a value head $v\in[-1,1]$; invalid actions are masked.
-    \item MiniSat is extended into a \emph{game} env supporting MCTS
-          \textbf{simulations} (hypothetical roll-outs without mutating the state).
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{AlphaZeroSAT --- Training}
-  \begin{itemize}
-    \item \textbf{Self-play}: MCTS, guided by $(\pi,v)$, produces improved visit
-          distributions; tuples (state, MCTS-policy, outcome) are stored.
-    \item \textbf{Supervised} update with the AlphaZero loss
-          \[\mathcal{L}= -\textstyle\sum_a \pi^{\text{MCTS}}_a\log\pi_a + (z-v)^2 + c\lVert\theta\rVert_2^2 .\]
-    \item Dataset: uniform-random 3-SAT, $20$ vars / $91$ clauses
-          (\texttt{uf20-91}), 32 train / 200 test.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{AlphaZeroSAT --- This work (modernisation)}
-  \begin{itemize}
-    \item Ported TensorFlow~1.x $\rightarrow$ \textbf{PyTorch}: networks
-          (\texttt{models\_torch}), trainer (\texttt{alphazero\_torch}), self-play
-          driver (\texttt{main\_torch}).
-    \item \textbf{Removed the GSL dependency} from the C++ env: Dirichlet noise
-          reimplemented with C++11 \texttt{<random>} $\Rightarrow$ builds with only
-          \texttt{g++}/\texttt{zlib}, no \texttt{sudo}.
-    \item Cleaned the fork (dropped unused OpenAI-baselines code), \textbf{runs
-          end-to-end} locally on the modern stack.
-    \item \emph{Limitation}: the fixed-size CNN does not generalise across problem
-          sizes --- motivating the graph approach.
+    \item State: CNF as a fixed-size \textbf{clauses\,$\times$\,variables} matrix; a
+          \textbf{CNN} with policy head $\pi$ and value head $v\in[-1,1]$.
+    \item MiniSat extended into a \emph{game} env supporting MCTS \textbf{simulations}.
+    \item Self-play + supervised training with the AlphaZero loss
+          $-\sum_a \pi^{\text{MCTS}}_a\log\pi_a + (z-v)^2 + c\lVert\theta\rVert^2$.
+    \item \textbf{This work}: ported to PyTorch; \textbf{GSL removed} (Dirichlet noise
+          via C++11 \texttt{<random>}); trains end-to-end on \texttt{uf20-91} (CPU/GPU).
+    \item \emph{Limitation}: the fixed-size CNN \textbf{cannot generalise across sizes}
+          --- the motivation for graphs.
   \end{itemize}
 \end{frame}
 
@@ -148,107 +129,101 @@
 \sectiondivider{GraphQSAT}{%
   \begin{itemize}
     \item GraphQSAT
-    \item Background
-      \begin{itemize}\item Deep Q-Learning (DQN)\item Graph Neural Networks (GNNs)\end{itemize}
-    \item Model
-    \item Graph Attention Networks (GATs)
-    \item Training \item Results
+    \item Background \begin{itemize}\item Deep Q-Learning (DQN)\item Graph Neural Networks\end{itemize}
+    \item Model \item Graph Attention Networks (GATs) \item Training \item Results
   \end{itemize}}{(ISPR + RL -- survey with extra coding)\\[2mm]
   Kurin et al., \emph{Can Q-Learning with Graph Networks Learn a Generalizable
-  Branching Heuristic for a SAT Solver?}\\ Battaglia et al., \emph{Relational
-  inductive biases, deep learning, and graph networks}.}
+  Branching Heuristic for a SAT Solver?}}
 
-\begin{frame}{Graph-Q-SAT --- Model}
+\begin{frame}{Graph-Q-SAT \& GAT-Q-SAT --- model}
   \begin{itemize}
-    \item \textbf{Goal}: can DQN with a GNN learn a \emph{generalizable} branching
-          heuristic?
-    \item State: \textbf{bipartite graph} (variable / clause nodes); node features
-          2-D one-hot, edge features = literal polarity, empty global.
-    \item $Q$-function: \textbf{encode--process--decode} graph network; action =
-          $\arg\max$ $Q$ over variable nodes.
-    \item Reward $-p$ per step, $0$ at termination; metric = \textbf{MRIR}
-          (median MiniSat-iters / model-iters).
+    \item State: \textbf{bipartite graph} (variable / clause nodes); edge features =
+          literal polarity. $Q$-function = \textbf{encode--process--decode} graph net; DQN.
+    \item Action: $\arg\max$ $Q$ over variable nodes. Metric: \textbf{MRIR} (MiniSat
+          iters / model iters; $>1$ is better than MiniSat).
+    \item \textbf{GAT-Q-SAT (this work)}: inject edge-aware, multi-head
+          \texttt{GATConv} attention into the core block --- weight the most relevant
+          neighbouring clauses/variables.
+    \item Port: dropped \texttt{torch-scatter}/\texttt{sparse}; gym-robust env;
+          version-agnostic checkpoint loading.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{GAT-Q-SAT --- attention variant (extra coding)}
-  \begin{itemize}
-    \item Inject \textbf{Graph Attention} (\texttt{GATConv}, edge-aware, multi-head)
-          into the core message-passing block.
-    \item Attention weights neighbouring clauses/variables --- useful when the
-          instance has an exploitable sub-structure.
-    \item Same DQN training; toggled with \texttt{--use\_attention}.
-    \item \emph{Note}: the field later moved to attention/Graph-Transformers
-          (NeuroBack, ICLR'24) --- this variant anticipated that direction.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Results --- graph colouring (MRIR vs model decisions)}
-  \begin{columns}
-    \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\textwidth]{gatqsat.png}\\[-1mm]
-      {\scriptsize GAT-Q-SAT: strong \& stable, also on large instances}
-    \end{column}
-    \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\textwidth]{graphqsat.png}\\[-1mm]
-      {\scriptsize Graph-Q-SAT: degrades on large instances at high caps}
-    \end{column}
-  \end{columns}
-  \vspace{1mm}
-  {\footnotesize Generated locally from \texttt{runs/*/*.tsv} (\texttt{make\_plots.py}) --- no more Google Sheets.}
-\end{frame}
-
-\begin{frame}{Results --- random 3-SAT and solving time}
-  \begin{columns}
-    \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\textwidth]{graphqsat_random.png}\\[-1mm]
-      {\scriptsize On random 3-SAT, plain Graph-Q-SAT is strongest ($\sim$5$\times$)}
-    \end{column}
-    \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\textwidth]{gatqsat_time.png}\\[-1mm]
-      {\scriptsize Wall-clock time vs.\ model decisions}
-    \end{column}
-  \end{columns}
-  \vspace{1mm}
-  \textbf{Finding}: attention helps where there is structure to infer (graph
-  colouring); on near-uniform random SAT it does not.
-\end{frame}
-
-\begin{frame}{Results --- exact reproduction (this work)}
+\begin{frame}{Reproduction (semantic non-regression)}
   \begin{itemize}
     \item Re-ran the \emph{original trained checkpoints} on the modern stack
-          (latest torch / PyTorch~Geometric / numpy~$\geq$2 / gymnasium).
-    \item MRIR matches the committed logs \textbf{exactly} --- e.g.\
-          \texttt{flat30-60}, cap 500:
+          (latest torch / PyG / numpy$\geq$2 / gymnasium).
+    \item MRIR matches the committed logs \textbf{exactly}:
   \end{itemize}
   \begin{center}\small
   \begin{tabular}{lcc}
-    \hline
-    Model & MRIR (median) & committed \\ \hline
+    \toprule Model & MRIR (median) & committed \\\midrule
     Graph-Q-SAT & 1.833 & 1.833 \\
-    GAT-Q-SAT   & 1.667 & 1.667 \\ \hline
+    GAT-Q-SAT   & 1.667 & 1.667 \\\bottomrule
   \end{tabular}
   \end{center}
   \begin{itemize}
     \item Drop-in changes only (scatter, env construction, GATConv key remap) ---
-          \textbf{semantics preserved}.
+          \textbf{semantics preserved}. Figures regenerated from the logs (no Sheets).
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Results --- the central finding}
+  \begin{columns}
+    \begin{column}{0.58\textwidth}\centering
+      \includegraphics[width=\textwidth]{thesis.png}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      Clean attention on/off ablation, matched training sets (mean MRIR, cap 500):
+      \begin{itemize}
+        \item \textbf{Colouring} (in-dist): GAT \textbf{2.97} vs 2.04.
+        \item \textbf{Transfer} random$\to$colouring: GAT \textbf{1.53} vs 0.94
+              (Graph-Q-SAT $<1$, i.e.\ worse than MiniSat!).
+        \item \textbf{Random} 3-SAT: attention \emph{does not} help (1.52 vs 2.19).
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{1mm}
+  \centerline{\footnotesize \textbf{Attention helps on structured problems, not on uniform-random SAT.}}
+\end{frame}
+
+\begin{frame}{Results --- attention helps more on \emph{larger} structured problems}
+  \begin{columns}
+    \begin{column}{0.52\textwidth}\centering
+      \includegraphics[width=\textwidth]{generalization.png}\\[-1mm]
+      {\scriptsize Random-trained: MRIR vs problem size (cap 500).}
+    \end{column}
+    \begin{column}{0.48\textwidth}\small
+      In-distribution graph colouring, MRIR per size:
+      \begin{center}
+      \begin{tabular}{lccc}
+        \toprule set & Graph & GAT & $\Delta$ \\\midrule
+        flat30-60   & 1.83 & 2.00 & +0.17 \\
+        flat125-301 & 2.55 & 3.44 & +0.88 \\
+        flat150-360 & 1.92 & 3.76 & +1.85 \\
+        flat200-479 & 1.35 & 3.39 & \textbf{+2.04} \\\bottomrule
+      \end{tabular}
+      \end{center}
+      Plain Graph-Q-SAT \textbf{degrades} on large instances; GAT-Q-SAT holds up ---
+      the advantage \textbf{grows with size}.
+    \end{column}
+  \end{columns}
+\end{frame}
+
 % ================================================================== Conclusions
-\begin{frame}{Conclusions}
+\begin{frame}{Where the field went \& conclusions}
   \begin{itemize}
-    \item Two neuro-symbolic SAT methods modernised to one self-contained
-          \textbf{PyTorch} stack; brittle deps (TF1.x, GSL,
-          torch-scatter/sparse, pinned gym) removed.
-    \item Results \textbf{reproduced exactly}; figures regenerated locally.
-    \item \textbf{Graph attention} helps on structured problems (graph colouring),
-          not on uniform-random SAT.
-    \item The fixed-size CNN (AlphaZeroSAT) cannot generalise across sizes --- the
-          gap graph methods and later work (NeuroCore/Comb/Back) address.
+    \item Lineage: NeuroSAT $\to$ NeuroCore $\to$ NeuroComb $\to$ \textbf{NeuroBack}
+          (ICLR'24): a Graph \emph{Transformer} with self-attention, \emph{offline}
+          one-shot inference $\Rightarrow$ first wall-clock speed-ups on Kissat.
+    \item This \textbf{validates} the attention direction (GAT-Q-SAT) and addresses
+          Graph-Q-SAT's known limit (online inference too slow).
+    \item \textbf{Our results}: graph attention helps on structured problems
+          (colouring), in-distribution and under transfer, \emph{growing with size};
+          not on random SAT. The fixed-size CNN (AlphaZeroSAT) cannot generalise.
   \end{itemize}
   \vfill
-  {\scriptsize Code, report and reproducible plots in the project repository.}
+  {\scriptsize Code, report and reproducible figures: \texttt{github.com/dmeoli/NeuroSAT}.}
 \end{frame}
 
 \end{document}
