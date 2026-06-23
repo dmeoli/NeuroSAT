@@ -84,6 +84,8 @@
           non-regression oracle).
     \item \textbf{GAT-Q-SAT}: an attention-augmented variant, with a clean
           attention-on/off study showing \emph{where} attention helps.
+    \item \textbf{GTv2-Q-SAT}: a further successor that brings a NeuroBack-style
+          \texttt{GATv2} graph-transformer block into the online RL setting.
   \end{itemize}
 \end{frame}
 
@@ -148,8 +150,9 @@
     \item \textbf{GAT-Q-SAT (this work)}: inject edge-aware, multi-head
           \texttt{GATConv} attention into the core block --- weight the most relevant
           neighbouring clauses/variables.
-    \item Port: dropped \texttt{torch-scatter}/\texttt{sparse}; gym-robust env;
-          version-agnostic checkpoint loading.
+    \item \textbf{GTv2-Q-SAT (this work)}: a NeuroBack-inspired successor --- a
+          pre-norm Transformer block on \texttt{GATv2} (\emph{dynamic} edge-featured
+          attention) replacing the static \texttt{GATConv} layers.
   \end{itemize}
 \end{frame}
 

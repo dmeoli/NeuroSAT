@@ -120,6 +120,16 @@ refine the node embeddings before the global update. Attention lets the model
 weight neighbouring clauses/variables, which we hypothesise is beneficial when the
 instance has an exploitable sub-structure.
 
+\paragraph{GTv2-Q-SAT (this work).} Motivated by NeuroBack's graph-transformer
+encoder~\cite{neuroback}, we add a third, more expressive attention variant: the two
+static \texttt{GATConv} layers are replaced by a single \emph{pre-norm Transformer
+block} built on \texttt{GATv2}~\cite{brody2022} --- which computes \emph{dynamic},
+input-dependent edge-featured attention rather than GAT's static scoring --- with a
+parallel feed-forward branch and a residual connection. It keeps the bipartite,
+self-loop-free message passing and is selected at run time
+(\texttt{--attention\_type graph\_transformer}), giving the model lineage
+Graph-Q-SAT $\rightarrow$ GAT-Q-SAT $\rightarrow$ GTv2-Q-SAT.
+
 \paragraph{Modernisation (this work).} We port Graph-Q-SAT to the latest
 PyTorch / PyTorch-Geometric. We drop the hard-to-install
 \texttt{torch-scatter}/\texttt{torch-sparse} (replaced by
@@ -234,7 +244,10 @@ trajectory is notable for two reasons relevant to this project: (i) the move to
 known limitation of Graph-Q-SAT --- online inference is too slow for wall-clock
 gains --- is exactly what offline, one-shot inference overcomes. Recent work
 continues along the RL-from-algorithm-feedback and restricted-heuristics
-lines~\cite{mlforsat2023}, and surveys catalogue the design space~\cite{survey2025}.
+lines~\cite{mlforsat2023}, and benchmarks~\cite{g4satbench} and
+surveys~\cite{survey2025} catalogue the design space. Our \emph{GTv2-Q-SAT} brings
+the graph-transformer attention of this trajectory back into the \emph{online}
+RL-branching setting of Graph-Q-SAT.
 
 \section{Conclusions}
 We modernised two neuro-symbolic SAT methods to one self-contained, latest-version
@@ -246,8 +259,9 @@ crisp, size-dependent result: \textbf{graph attention helps on structured proble
 with problem size, while it does not help on uniform-random 3-SAT}. The fixed-size
 CNN of the Alpha(Go)Zero method, while elegant, cannot generalise across sizes ---
 the gap that graph methods, and the subsequent literature (NeuroCore/Comb/Back),
-were designed to close. Promising next steps are larger attention/Graph-Transformer
-back-ends and offline inference for genuine wall-clock gains.
+were designed to close. We realised one promising next step, \textbf{GTv2-Q-SAT}, a
+GATv2 graph-transformer attention block inspired by NeuroBack; pushing inference
+\emph{offline} for genuine wall-clock gains remains future work.
 
 \begin{thebibliography}{9}
 \bibitem{wang2018} F. Wang and T. Rompf. \emph{From Gameplay to Symbolic Reasoning:
@@ -257,6 +271,8 @@ back-ends and offline inference for genuine wall-clock gains.
   SAT Solver?} NeurIPS 2020. arXiv:1909.11830.
 \bibitem{velickovic2018} P. Veli\v{c}kovi\'c et al. \emph{Graph Attention
   Networks}. ICLR 2018. arXiv:1710.10903.
+\bibitem{brody2022} S. Brody, U. Alon, E. Yahav. \emph{How Attentive are Graph
+  Attention Networks?} ICLR 2022. arXiv:2105.14491.
 \bibitem{battaglia2018} P. Battaglia et al. \emph{Relational inductive biases, deep
   learning, and graph networks}. arXiv:1806.01261.
 \bibitem{neurosat} D. Selsam et al. \emph{Learning a SAT Solver from Single-Bit
@@ -265,8 +281,10 @@ back-ends and offline inference for genuine wall-clock gains.
   Solvers with Unsat-Core Predictions}. arXiv:1903.04671.
 \bibitem{neuroback} W. Wang et al. \emph{NeuroBack: Improving CDCL SAT Solving using
   Graph Neural Networks}. ICLR 2024. arXiv:2110.14053.
-\bibitem{mlforsat2023} \emph{Machine Learning for SAT: Restricted Heuristics and New
-  Graph Representations}. arXiv:2307.09141, 2023.
+\bibitem{mlforsat2023} N. Shirokikh et al. \emph{Machine Learning for SAT: Restricted
+  Heuristics and New Graph Representations}. arXiv:2307.09141, 2023.
+\bibitem{g4satbench} Z. Li, J. Guo, X. Si. \emph{G4SATBench: Benchmarking and
+  Advancing SAT Solving with Graph Neural Networks}. arXiv:2309.16941, 2023.
 \bibitem{survey2025} \emph{Neural Approaches to SAT Solving: Design Choices and
   Interpretability}. arXiv:2504.01173, 2025.
 \end{thebibliography}
