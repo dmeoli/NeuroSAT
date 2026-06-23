@@ -17,6 +17,9 @@
 \setbeamercolor{title}{fg=ink}
 \setbeamercolor{itemize item}{fg=tan}
 \setbeamercolor{itemize subitem}{fg=tan}
+% one shared horizontal margin for the body AND the header/footer, so they align
+\setbeamersize{text margin left=9mm,text margin right=9mm}
+
 \setbeamerfont{frametitle}{size=\LARGE}
 \setbeamertemplate{frametitle}{\vspace{0.5mm}\insertframetitle\par}
 
@@ -25,14 +28,14 @@
 % Sits flush to the top edge: a short top inset, the names, then a hairline rule.
 \setbeamertemplate{headline}{%
   \vskip1.2mm%
-  \hbox to \paperwidth{\hspace{4mm}{\scriptsize\color{tan}Neuro-symbolic approaches to the SAT problem}%
-        \hfill{\scriptsize\color{gray}Donato Meoli}\hspace{4mm}}%
+  \hbox to \paperwidth{\hspace{9mm}{\scriptsize\color{tan}Neuro-symbolic approaches to the SAT problem}%
+        \hfill{\scriptsize\color{gray}Donato Meoli}\hspace{9mm}}%
   \vskip0.6mm%
-  \hbox to \paperwidth{\hspace{4mm}{\color{tan!35}\rule{\dimexpr\paperwidth-8mm\relax}{0.4pt}}\hfill}%
+  \hbox to \paperwidth{\hspace{9mm}{\color{tan!35}\rule{\dimexpr\paperwidth-18mm\relax}{0.4pt}}\hfill}%
 }
 \setbeamertemplate{footline}{%
-  \hbox to \paperwidth{\hspace{4mm}{\scriptsize\color{gray}University of Pisa}%
-        \hfill{\color{tan}\scriptsize\insertframenumber}\hspace{4mm}}\vskip1.8mm%
+  \hbox to \paperwidth{\hspace{9mm}{\scriptsize\color{gray}University of Pisa}%
+        \hfill{\color{tan}\scriptsize\insertframenumber}\hspace{9mm}}\vskip1.8mm%
 }
 
 \newcommand{\sectiondivider}[3]{%
