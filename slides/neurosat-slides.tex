@@ -18,8 +18,20 @@
 \setbeamercolor{itemize item}{fg=tan}
 \setbeamercolor{itemize subitem}{fg=tan}
 \setbeamerfont{frametitle}{size=\LARGE}
-\setbeamertemplate{frametitle}{\vspace{3mm}\insertframetitle\par}
-\setbeamertemplate{footline}{\hfill{\color{tan}\scriptsize\insertframenumber}\hspace{4mm}\vspace{2.5mm}}
+\setbeamertemplate{frametitle}{\vspace{1.5mm}\insertframetitle\par}
+
+% running header (project left, author right) + footer (university left, page right)
+% on content frames; [plain] frames (title, dividers, thanks) suppress both.
+\setbeamertemplate{headline}{%
+  \leavevmode\vskip2mm%
+  \hspace{4mm}{\scriptsize\color{tan}Neuro-symbolic approaches to the SAT problem}%
+  \hfill{\scriptsize\color{gray}Donato Meoli}\hspace{4mm}%
+  \vskip1mm\hspace{4mm}{\color{tan!35}\rule{\dimexpr\paperwidth-8mm\relax}{0.4pt}}%
+}
+\setbeamertemplate{footline}{%
+  \hspace{4mm}{\scriptsize\color{gray}University of Pisa}%
+  \hfill{\color{tan}\scriptsize\insertframenumber}\hspace{4mm}\vspace{2.5mm}%
+}
 
 \newcommand{\sectiondivider}[3]{%
 \begin{frame}[plain]
@@ -199,7 +211,7 @@
 \end{frame}
 
 % ================================================================ GRAPH-Q-SAT
-\sectiondivider{Graph-Q-SAT\\ \&\\ GAT-Q-SAT}{%
+\sectiondivider{Graph-Q-SAT\\[2.5mm]{\Large\&}\\[2.5mm]GAT-Q-SAT}{%
   \begin{itemize}
     \item Reinforcement learning for branching
     \item Background \begin{itemize}\item Deep Q-Learning (DQN)\item Graph Networks\end{itemize}
@@ -421,7 +433,7 @@
 \end{frame}
 
 % ================================================================ IMPLEMENTATION
-\sectiondivider{Implementation\\ \&\\ Results}{%
+\sectiondivider{Implementation\\[2.5mm]{\Large\&}\\[2.5mm]Results}{%
   \begin{itemize}
     \item Modernisation \& porting
     \item Restricted heuristics (online speed-ups)
