@@ -18,19 +18,21 @@
 \setbeamercolor{itemize item}{fg=tan}
 \setbeamercolor{itemize subitem}{fg=tan}
 \setbeamerfont{frametitle}{size=\LARGE}
-\setbeamertemplate{frametitle}{\vspace{1.5mm}\insertframetitle\par}
+\setbeamertemplate{frametitle}{\vspace{0.5mm}\insertframetitle\par}
 
 % running header (project left, author right) + footer (university left, page right)
 % on content frames; [plain] frames (title, dividers, thanks) suppress both.
+% Sits flush to the top edge: a short top inset, the names, then a hairline rule.
 \setbeamertemplate{headline}{%
-  \leavevmode\vskip2mm%
-  \hspace{4mm}{\scriptsize\color{tan}Neuro-symbolic approaches to the SAT problem}%
-  \hfill{\scriptsize\color{gray}Donato Meoli}\hspace{4mm}%
-  \vskip1mm\hspace{4mm}{\color{tan!35}\rule{\dimexpr\paperwidth-8mm\relax}{0.4pt}}%
+  \vskip1.2mm%
+  \hbox to \paperwidth{\hspace{4mm}{\scriptsize\color{tan}Neuro-symbolic approaches to the SAT problem}%
+        \hfill{\scriptsize\color{gray}Donato Meoli}\hspace{4mm}}%
+  \vskip0.6mm%
+  \hbox to \paperwidth{\hspace{4mm}{\color{tan!35}\rule{\dimexpr\paperwidth-8mm\relax}{0.4pt}}\hfill}%
 }
 \setbeamertemplate{footline}{%
-  \hspace{4mm}{\scriptsize\color{gray}University of Pisa}%
-  \hfill{\color{tan}\scriptsize\insertframenumber}\hspace{4mm}\vspace{2.5mm}%
+  \hbox to \paperwidth{\hspace{4mm}{\scriptsize\color{gray}University of Pisa}%
+        \hfill{\color{tan}\scriptsize\insertframenumber}\hspace{4mm}}\vskip1.8mm%
 }
 
 \newcommand{\sectiondivider}[3]{%
@@ -45,7 +47,7 @@
     \hfill
     \begin{column}{0.48\textwidth}
       \colorbox{tan}{\begin{minipage}[t][0.86\paperheight][c]{\textwidth}
-        \hspace{4mm}{\color{white}\huge\textbf{#1}}\\[2mm]
+        \centering\color{white}\huge\textbf{#1}
       \end{minipage}}
     \end{column}
   \end{columns}
