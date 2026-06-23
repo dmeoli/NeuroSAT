@@ -1,6 +1,6 @@
 \documentclass[aspectratio=169]{beamer}
 
-% --- minimalist theme matching the original deck (tan/gold accent on white) ---
+% --- minimalist theme matching the original deck (violet accent on white) ---
 \usetheme{default}
 \usefonttheme{professionalfonts}
 \setbeamertemplate{navigation symbols}{}
@@ -8,7 +8,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{booktabs}
-\graphicspath{{../img/}{../img/paper/}}
+\graphicspath{{img/}{../img/}{../img/paper/}}
 
 \definecolor{tan}{RGB}{102,80,148}   % professional violet/lilac accent
 \definecolor{ink}{RGB}{40,40,40}
@@ -18,21 +18,22 @@
 \setbeamercolor{itemize item}{fg=tan}
 \setbeamercolor{itemize subitem}{fg=tan}
 \setbeamerfont{frametitle}{size=\LARGE}
-\setbeamertemplate{frametitle}{\vspace{4mm}\insertframetitle\par}
+\setbeamertemplate{frametitle}{\vspace{3mm}\insertframetitle\par}
 \setbeamertemplate{footline}{\hfill{\color{tan}\scriptsize\insertframenumber}\hspace{4mm}\vspace{2.5mm}}
 
 \newcommand{\sectiondivider}[3]{%
 \begin{frame}[plain]
   \begin{columns}
     \begin{column}{0.52\textwidth}
+      \raggedright
       \small #2
       \vfill
-      {\scriptsize\color{gray} #3}
+      {\scriptsize\color{gray} #3\par}
     \end{column}
     \hfill
     \begin{column}{0.48\textwidth}
       \colorbox{tan}{\begin{minipage}[t][0.86\paperheight][c]{\textwidth}
-        \hspace{4mm}\mbox{\color{white}\huge\textbf{#1}}\\[2mm]
+        \hspace{4mm}{\color{white}\huge\textbf{#1}}\\[2mm]
       \end{minipage}}
     \end{column}
   \end{columns}
@@ -44,6 +45,7 @@
 
 \begin{document}
 
+% ==================================================================== title
 {\setbeamertemplate{footline}{}
 \begin{frame}[plain]
   \vspace{1.2cm}
@@ -60,100 +62,401 @@
   \end{minipage}\hfill\,
 \end{frame}}
 
-% ------------------------------------------------------------------ SAT problem
+% ==================================================================== problem
 \begin{frame}{The SAT problem}
   \begin{itemize}
-    \item \textbf{SAT}: is there an assignment satisfying a Boolean (CNF) formula?
-          First problem proven NP-complete; core of verification, planning, synthesis.
-    \item Modern solvers are \textbf{CDCL}: decide a variable, unit-propagate, on a
-          conflict learn a clause and backtrack.
-    \item The \textbf{branching heuristic} (e.g.\ VSIDS) picks the decision variable
-          --- and makes poor choices during its warm-up phase.
-    \item \emph{This project}: learn the branching heuristic with two neuro-symbolic
-          methods, modernise them to PyTorch, reproduce, and study \textbf{where
-          graph attention helps}.
+    \item \textbf{SAT}: given a Boolean formula in CNF
+          $\varphi=\bigwedge_i \big(\bigvee_j \ell_{ij}\big)$, is there an assignment
+          of the variables that makes it true? First problem proven NP-complete;
+          the engine of verification, planning, synthesis.
+    \item Modern solvers are \textbf{CDCL}: \emph{decide} a variable, \emph{unit-propagate},
+          on a \emph{conflict} learn a clause and \emph{backtrack}.
+    \item The \textbf{branching heuristic} (which variable to decide next, e.g.\ VSIDS)
+          drives performance --- yet it makes poor choices during its warm-up phase,
+          when activity scores are still uninformative.
+    \item \emph{This project}: \textbf{learn the branching heuristic} with two
+          neuro-symbolic methods, modernise them to PyTorch, study \textbf{where graph
+          attention helps}, and reproduce the published results.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Contributions}
-  \begin{itemize}
-    \item Port both methods from \textbf{TensorFlow 1.x + GSL} to one self-contained
-          \textbf{PyTorch / PyTorch-Geometric} stack (latest \texttt{torch}, \texttt{numpy}$\geq$2,
-          \texttt{gymnasium}; no \texttt{torch-scatter}/\texttt{sparse}, no GSL).
-    \item \textbf{Reproduce the published Graph-Q-SAT results exactly} (semantic
-          non-regression oracle).
-    \item \textbf{GAT-Q-SAT}: an attention-augmented variant, with a clean
-          attention-on/off study showing \emph{where} attention helps.
-    \item \textbf{GTv2-Q-SAT}: a further successor that brings a NeuroBack-style
-          \texttt{GATv2} graph-transformer block into the online RL setting.
-  \end{itemize}
+% ==================================================================== roadmap
+\begin{frame}{Roadmap}
+  \begin{columns}[t]
+    \begin{column}{0.5\textwidth}
+      \textbf{Two ways to learn a SAT heuristic:}
+      \begin{itemize}
+        \item \textbf{Graph-Q-SAT} --- value-based RL (DQN) over a \emph{graph} neural
+              network on the CNF graph. Size-agnostic.
+        \item \textbf{AlphaZeroSAT} --- self-play + MCTS over a \emph{CNN} policy/value
+              net on the clause\,$\times$\,variable matrix. Fixed size.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{Our contributions:}
+      \begin{itemize}
+        \item port both from TensorFlow\,1.x\,+\,GSL to one PyTorch / PyTorch-Geometric
+              stack; reproduce the published numbers \emph{exactly};
+        \item \textbf{GAT-Q-SAT} and \textbf{GTv2-Q-SAT}: attention-augmented successors;
+        \item \textbf{Model3Attn}: a self-attention variant of AlphaZeroSAT;
+        \item \textbf{restricted heuristics} for online speed-ups.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vfill
+  {\footnotesize\color{gray} Plan: background on the CNF graph $\to$ Graph-Q-SAT \&
+  GAT $\to$ AlphaZeroSAT $\to$ implementation $\to$ results.}
 \end{frame}
 
-% ================================================================== NeuroSAT
-\sectiondivider{NeuroSAT}{%
+% ================================================================ BACKGROUND
+\sectiondivider{Background:\\ learning on\\ the CNF graph}{%
   \begin{itemize}
-    \item NeuroSAT
-    \item Background \begin{itemize}\item Message Passing NNs (MPNNs)\end{itemize}
-    \item Model \item Training \item Results
+    \item The CNF as a graph
+    \item Message Passing Neural Networks (MPNNs)
+    \item NeuroSAT --- the seminal graph model for SAT
   \end{itemize}}{(ISPR -- survey)\\[2mm]
+  Gilmer et al., \emph{Neural Message Passing for Quantum Chemistry}.\\
   Selsam et al., \emph{Learning a SAT Solver from Single-Bit Supervision}.}
 
-\begin{frame}{NeuroSAT (survey)}
+\begin{frame}{The CNF as a graph}
+  \begin{columns}[t]
+    \begin{column}{0.6\textwidth}
+      A CNF is naturally a \textbf{bipartite graph}:
+      \begin{itemize}
+        \item a node for every \textbf{variable} (or literal) and every \textbf{clause};
+        \item an edge between a literal and each clause it occurs in (edge feature =
+              \textbf{polarity}); for the literal view, an edge between complementary
+              literals $x,\bar x$.
+      \end{itemize}
+      \vspace{2mm}
+      This representation is \textbf{permutation-invariant} and \textbf{size-agnostic}:
+      the same network handles formulas of any size --- the property the fixed-size CNN
+      lacks. It is the substrate shared by NeuroSAT and Graph-Q-SAT.
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \centering
+      \footnotesize
+      $\varphi=(x_1\vee \bar x_2)\wedge(\bar x_1 \vee x_2 \vee x_3)$\\[3mm]
+      \begin{tabular}{c@{\hspace{6mm}}c}
+        \textbf{variables} & \textbf{clauses}\\\midrule
+        $x_1$ & \\
+        $x_2$ & $c_1$\\
+        $x_3$ & $c_2$\\
+      \end{tabular}\\[3mm]
+      {\scriptsize edges carry the literal polarity $\{+,-\}$.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Message Passing Neural Networks (MPNNs)}
+  A general framework for learning on graphs (Gilmer et al., 2017). Each node $v$ holds
+  a hidden state $h_v^{t}$; for $T$ rounds it exchanges messages with its neighbours
+  $\mathcal N(v)$:
+  \begin{align*}
+    \textbf{message:}\quad & m_v^{t+1} = \sum_{w\in\mathcal N(v)} M_t\!\big(h_v^{t},\,h_w^{t},\,e_{vw}\big)\\[1mm]
+    \textbf{update:}\quad  & h_v^{t+1} = U_t\!\big(h_v^{t},\,m_v^{t+1}\big)\\[1mm]
+    \textbf{readout:}\quad & \hat y = R\big(\{\,h_v^{T} : v\in G\,\}\big)
+  \end{align*}
   \begin{itemize}
-    \item \textbf{Goal}: can a neural network learn to solve SAT?
-    \item An MPNN trained \emph{only} as a SAT/UNSAT classifier (one-bit supervision)
-          nonetheless learns to find satisfying assignments.
-    \item Introduces the \textbf{graph view} of a CNF (variable/clause nodes) that
-          underpins Graph-Q-SAT --- our second method.
+    \item $M_t$ (message), $U_t$ (update, often a GRU/LSTM) and $R$ (readout) are
+          learned and \emph{shared across nodes and rounds}.
+    \item GNNs, gated GNNs, GCN, GAT and the encode--process--decode network are all
+          instances of this template.
   \end{itemize}
 \end{frame}
 
-% ================================================================== AlphaZeroSAT
-\sectiondivider{AlphaZeroSAT}{%
-  \begin{itemize}
-    \item AlphaZeroSAT
-    \item Background \begin{itemize}\item Monte Carlo Tree Search (MCTS)\end{itemize}
-    \item Model \item Training \item Results
-  \end{itemize}}{(ISPR + RL -- survey with coding)\\[2mm]
-  Wang \& Rompf, \emph{From Gameplay to Symbolic Reasoning \dots\ Alpha(Go) Zero}.}
-
-\begin{frame}{AlphaZeroSAT --- model \& training}
-  \begin{itemize}
-    \item State: CNF as a fixed-size \textbf{clauses\,$\times$\,variables} matrix; a
-          \textbf{CNN} with policy head $\pi$ and value head $v\in[-1,1]$.
-    \item MiniSat extended into a \emph{game} env supporting MCTS \textbf{simulations}.
-    \item Self-play + supervised training with the AlphaZero loss
-          $-\sum_a \pi^{\text{MCTS}}_a\log\pi_a + (z-v)^2 + c\lVert\theta\rVert^2$.
-    \item \textbf{This work}: ported to PyTorch; \textbf{GSL removed} (Dirichlet noise
-          via C++11 \texttt{<random>}); trains end-to-end on \texttt{uf20-91} (CPU/GPU).
-    \item \emph{Limitation}: the fixed-size CNN \textbf{cannot generalise across sizes}
-          --- the motivation for graphs.
-  \end{itemize}
+\begin{frame}{NeuroSAT --- a SAT solver from single-bit supervision}
+  \begin{columns}[t]
+    \begin{column}{0.54\textwidth}
+      \footnotesize
+      Literal/clause embeddings $L^{(t)}\!\in\!\mathbb{R}^{2n\times d}$,
+      $C^{(t)}\!\in\!\mathbb{R}^{m\times d}$; bipartite adjacency $M$; MLPs
+      $L_{\text{msg}},C_{\text{msg}},L_{\text{vote}}$; LSTM updates $L_u,C_u$.
+      One round:
+      \begin{align*}
+        (C^{(t+1)}\!,C_h^{(t+1)}) &\leftarrow C_u\big([\,C_h^{(t)},\,M^{\!\top} L_{\text{msg}}(L^{(t)})\,]\big)\\
+        (L^{(t+1)}\!,L_h^{(t+1)}) &\leftarrow L_u\big([\,L_h^{(t)},\,F(L^{(t)}),\,M\,C_{\text{msg}}(C^{(t+1)})\,]\big)
+      \end{align*}
+      after $T$ rounds, vote and average:
+      \[
+        L_*^{(T)}\leftarrow L_{\text{vote}}(L^{(T)}),\qquad
+        y^{(T)}\leftarrow \operatorname{mean}\big(L_*^{(T)}\big).
+      \]
+      $F$ swaps each literal with its complement.
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{itemize}
+        \item Trained \emph{only} as a SAT/UNSAT classifier (one bit per formula).
+        \item Yet it \textbf{learns to find satisfying assignments}: it guesses UNSAT
+              with low confidence until a solution crystallises in the literal votes.
+        \item Establishes the \textbf{graph view} of a CNF --- the foundation for
+              Graph-Q-SAT.
+        \item \emph{Limitation}: a standalone solver, not competitive in wall-clock
+              with CDCL.
+      \end{itemize}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-% ================================================================== GraphQSAT
-\sectiondivider{GraphQSAT}{%
+% ================================================================ GRAPH-Q-SAT
+\sectiondivider{Graph-Q-SAT\\ \&\\ GAT-Q-SAT}{%
   \begin{itemize}
-    \item GraphQSAT
-    \item Background \begin{itemize}\item Deep Q-Learning (DQN)\item Graph Neural Networks\end{itemize}
-    \item Model \item Graph Attention Networks (GATs) \item Training \item Results
+    \item Reinforcement learning for branching
+    \item Background \begin{itemize}\item Deep Q-Learning (DQN)\item Graph Networks\end{itemize}
+    \item Model --- encode--process--decode
+    \item Graph Attention (GAT, GATv2)
+    \item Results
   \end{itemize}}{(ISPR + RL -- survey with extra coding)\\[2mm]
   Kurin et al., \emph{Can Q-Learning with Graph Networks Learn a Generalizable
   Branching Heuristic for a SAT Solver?}}
 
-\begin{frame}{Graph-Q-SAT \& GAT-Q-SAT --- model}
+\begin{frame}{Branching as a Markov Decision Process}
+  Graph-Q-SAT turns the CDCL search into an MDP $(\mathcal S,\mathcal A,P,r,\gamma)$:
   \begin{itemize}
-    \item State: \textbf{bipartite graph} (variable / clause nodes); edge features =
-          literal polarity. $Q$-function = \textbf{encode--process--decode} graph net; DQN.
-    \item Action: $\arg\max$ $Q$ over variable nodes. Metric: \textbf{MRIR} (MiniSat
-          iters / model iters; $>1$ is better than MiniSat).
-    \item \textbf{GAT-Q-SAT (this work)}: inject edge-aware, multi-head
-          \texttt{GATConv} attention into the core block --- weight the most relevant
-          neighbouring clauses/variables.
-    \item \textbf{GTv2-Q-SAT (this work)}: a NeuroBack-inspired successor --- a
-          pre-norm Transformer block on \texttt{GATv2} (\emph{dynamic} edge-featured
-          attention) replacing the static \texttt{GATConv} layers.
+    \item \textbf{state} $s$: the current CNF as a bipartite graph (variable/clause nodes,
+          polarity edges, a global attribute);
+    \item \textbf{action} $a$: assign an unassigned variable True/False --- one decision;
+    \item \textbf{reward} $r=-p$ at every non-terminal step, $0$ at termination
+          $\Rightarrow$ maximising the return \emph{minimises the number of decisions};
+    \item \textbf{return} $G_t=\sum_{k\ge 0}\gamma^{k}\,r_{t+k}$.
   \end{itemize}
+  \vspace{1mm}
+  Goal: learn the action-value (\emph{quality}) function
+  \[
+    Q^\star(s,a)=\mathbb E\big[\,r + \gamma \max_{a'} Q^\star(s',a')\,\big]
+    \qquad\text{(Bellman optimality).}
+  \]
+  The branching heuristic is then $\pi(s)=\arg\max_a Q^\star(s,a)$ over the variable nodes.
+\end{frame}
+
+\begin{frame}{Deep Q-Learning (DQN)}
+  Approximate $Q^\star$ with a network $Q_\theta$, fitted by minimising the temporal-difference
+  error over a replay buffer $\mathcal D$:
+  \[
+    \mathcal L(\theta)=\mathbb E_{(s,a,r,s')\sim\mathcal D}\!\left[
+      \Big(\underbrace{r+\gamma\max_{a'}Q_{\theta^-}(s',a')}_{\text{TD target}}-Q_\theta(s,a)\Big)^{2}
+    \right]
+  \]
+  \begin{itemize}
+    \item \textbf{target network} $\theta^-$ (a slow copy of $\theta$) stabilises the target;
+    \item \textbf{experience replay} $\mathcal D$ breaks temporal correlations;
+    \item \textbf{$\varepsilon$-greedy} exploration: random action w.p.\ $\varepsilon$, else $\arg\max_a Q_\theta$.
+  \end{itemize}
+  Here the action set is \emph{variable-sized} (one per unassigned variable), so $Q_\theta$
+  must be a \textbf{graph} network that scores each variable node.
+\end{frame}
+
+\begin{frame}{Model --- the encode--process--decode graph network}
+  \begin{columns}[c]
+    \begin{column}{0.4\textwidth}
+      \footnotesize
+      A graph-network block (Battaglia et al.) updates edges, then nodes, then the global:
+      \begin{align*}
+        e_k' &= \phi^e\big(e_k,v_{r_k},v_{s_k},u\big)\\
+        v_i' &= \phi^v\big(\textstyle\rho^{e\to v}(\{e_k'\}),v_i,u\big)\\
+        u'   &= \phi^u\big(\rho^{e\to u}(\{e_k'\}),\rho^{v\to u}(\{v_i'\}),u\big)
+      \end{align*}
+      $\phi$ are MLPs; $\rho$ are permutation-invariant aggregations (sum).
+      \textbf{Encode} (independent) $\to$ \textbf{core} ($\times M$ message-passing steps,
+      shared) $\to$ \textbf{decode}; the per-variable $Q$-values come out of the decoder.
+    \end{column}
+    \begin{column}{0.6\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{gqsat_epd.png}\\
+      {\scriptsize encode--process--decode: $\mathrm{GN}_{enc}\to\mathrm{GN}_{core}{\times}M\to\mathrm{GN}_{dec}$.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Configuration \& metric}
+  \begin{columns}[t]
+    \begin{column}{0.5\textwidth}
+      \textbf{How the model is configured:}
+      \begin{itemize}
+        \item node features: 2-D one-hot (variable / clause); edge feature: polarity;
+              global: empty.
+        \item encoder/core/decoder hidden size $64$; $M$ core message-passing steps
+              (a key knob at test time);
+        \item DQN: Adam, target-net sync, prioritised replay, $\gamma\!\approx\!0.99$.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{Metric --- MRIR:}
+      \[
+        \text{MRIR}=\operatorname{median}\frac{\#\text{iters}_{\text{MiniSat}}}{\#\text{iters}_{\text{model}}}
+      \]
+      Median Relative Iteration Reduction: $>1$ means \emph{fewer} CDCL iterations than
+      MiniSat's VSIDS. Reported as a function of the test-time decision budget (the cap).
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- GAT
+\begin{frame}{Improvement idea: graph attention}
+  \begin{itemize}
+    \item In the core block, a node aggregates \emph{all} neighbours with equal weight
+          ($\rho$ = sum). But not all neighbouring clauses/variables are equally relevant
+          to a branching decision.
+    \item \textbf{Idea}: replace the uniform aggregation with a \textbf{learned,
+          edge-aware attention} over neighbours, so the network can encode more abstract
+          dependencies in the SAT graph.
+    \item This is the \emph{non-local} graph-network variant --- a \textbf{Graph Attention
+          Network (GAT)} inside the core.
+  \end{itemize}
+  \vfill
+  {\footnotesize\color{gray} Veli\v{c}kovi\'c et al., \emph{Graph Attention Networks}
+  (ICLR 2018); Brody et al., \emph{How Attentive are GATs?} (ICLR 2022).}
+\end{frame}
+
+\begin{frame}{Graph Attention Networks (GAT)}
+  For node $i$ with neighbours $\mathcal N_i$ and a shared linear map $W$, attention
+  weights a message by relevance:
+  \begin{align*}
+    \text{score:}\quad & e_{ij}=\text{LeakyReLU}\big(\mathbf a^{\!\top}[\,W h_i \,\|\, W h_j\,]\big)\\
+    \text{normalise:}\quad & \alpha_{ij}=\operatorname{softmax}_j(e_{ij})=\frac{\exp(e_{ij})}{\sum_{k\in\mathcal N_i}\exp(e_{ik})}\\
+    \text{aggregate:}\quad & h_i'=\sigma\Big(\textstyle\sum_{j\in\mathcal N_i}\alpha_{ij}\,W h_j\Big)
+  \end{align*}
+  \begin{itemize}
+    \item \textbf{multi-head}: $K$ independent attentions are concatenated (or averaged)
+          for stability and capacity;
+    \item edges carry the literal polarity, so attention is \textbf{edge-featured}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{GAT-Q-SAT \& GTv2-Q-SAT --- our attention successors}
+  \begin{columns}[c]
+    \begin{column}{0.46\textwidth}
+      \footnotesize
+      \textbf{GAT-Q-SAT}: inject two edge-aware multi-head \texttt{GATConv} layers into
+      the core block (the non-local block, right).\\[2mm]
+      \textbf{GTv2-Q-SAT} (further successor, inspired by NeuroBack): a \emph{pre-norm
+      Transformer block} on \textbf{GATv2}, which makes attention \emph{dynamic} by moving
+      the nonlinearity before $\mathbf a$:
+      \[
+        e_{ij}=\mathbf a^{\!\top}\,\text{LeakyReLU}\big(W[\,h_i\,\|\,h_j\,]\big)
+      \]
+      \[
+        h' = \text{LN}\big(h + \text{GATv2}(h) + \text{FFN}(h)\big)
+      \]
+      lineage: \textbf{Graph-Q-SAT $\to$ GAT-Q-SAT $\to$ GTv2-Q-SAT}.
+    \end{column}
+    \begin{column}{0.54\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{gatqsat_epd.png}\\
+      {\scriptsize the core becomes a \emph{non-local} GN block --- a GAT with edge
+      attention $\alpha^e,\beta^e$.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ================================================================ ALPHAZEROSAT
+\sectiondivider{AlphaZeroSAT}{%
+  \begin{itemize}
+    \item Search-based RL for branching
+    \item Background \begin{itemize}\item Monte Carlo Tree Search (MCTS)\item AlphaZero self-play\end{itemize}
+    \item Model --- CNN policy/value net
+    \item Results
+  \end{itemize}}{(ISPR + RL -- survey with coding)\\[2mm]
+  Wang \& Rompf, \emph{From Gameplay to Symbolic Reasoning: Learning SAT Solver
+  Heuristics in the Style of Alpha(Go) Zero}.}
+
+\begin{frame}{Monte Carlo Tree Search (MCTS)}
+  Treat solving as a game: each node is a partial assignment, each move a branching
+  literal. From the root, repeat four steps:
+  \begin{enumerate}
+    \item \textbf{select} the child maximising the PUCT score
+      \[
+        a_t=\arg\max_a\Big(Q(s,a)+\underbrace{c_{\text{puct}}\,P(s,a)\tfrac{\sqrt{\sum_b N(s,b)}}{1+N(s,a)}}_{U(s,a)}\Big);
+      \]
+    \item \textbf{expand} a leaf and evaluate it with the network $(P,v)=f_\theta(s)$;
+    \item \textbf{simulate} / bootstrap from the value $v$;
+    \item \textbf{back-up}: $N\!\mathrel{+}\!=\!1$, $W\!\mathrel{+}\!=\!v$, $Q=W/N$.
+  \end{enumerate}
+  The search yields an improved policy from the visit counts:
+  $\pi(a\mid s)\propto N(s,a)^{1/\tau}$.
+\end{frame}
+
+\begin{frame}{AlphaZero --- self-play policy iteration}
+  A single network $(p,v)=f_\theta(s)$ outputs a \textbf{policy} $p$ over moves and a
+  \textbf{value} $v\in[-1,1]$ (probability of solving from $s$).
+  \begin{itemize}
+    \item \textbf{Self-play}: MCTS, guided by $f_\theta$, produces a stronger policy
+          $\pi$; play it to the end to obtain an outcome $z$.
+    \item \textbf{Learn}: regress $v\!\to\!z$ and $p\!\to\!\pi$ --- MCTS is the policy-improvement
+          operator, the network is the policy-evaluation operator:
+      \[
+        \ell=\underbrace{(z-v)^2}_{\text{value}}\;\underbrace{-\,\pi^{\!\top}\!\log p}_{\text{policy (cross-entropy)}}\;+\;\underbrace{c\lVert\theta\rVert^2}_{\text{regularisation}} .
+      \]
+    \item No human data, no heuristics: the heuristic \emph{emerges} from self-play.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{AlphaZeroSAT --- the model}
+  \begin{columns}[t]
+    \begin{column}{0.56\textwidth}
+      \footnotesize
+      \textbf{State}: the CNF as a fixed-size \textbf{clauses\,$\times$\,variables} matrix
+      (entries $\{+1,0,-1\}$ by literal polarity, as image channels).\\[1mm]
+      \textbf{Network}: a CNN trunk (conv $32@8{\times}8$, $64@4{\times}4$, $64@3{\times}3$)
+      then two heads:
+      \begin{align*}
+        \text{policy } p &= \text{softmax}\big(\text{logits} + (\text{mask}-1)\!\cdot\!\infty\big)\in\Delta^{2n}\\
+        \text{value } v &= \tanh(\cdot)\in[-1,1]
+      \end{align*}
+      invalid literals (variables absent from remaining clauses) are masked to $-\infty$.\\[1mm]
+      \textbf{Model1/2/3} differ in the heads (fc vs convolutional); \textbf{Model3Attn}
+      (this work) adds a multi-head \textbf{self-attention} block over the conv feature
+      map --- the Alpha(Go)Zero analogue of GAT-Q-SAT.
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \footnotesize
+      \textbf{Env}: MiniSat is extended into an MCTS \emph{game} supporting hypothetical
+      simulations.\\[2mm]
+      \textbf{Metric}: mean branching \emph{decisions} to solve (lower is better),
+      reproducing the paper's Fig.~2.\\[2mm]
+      \emph{Limitation}: the fixed-size matrix means the CNN \textbf{cannot generalise
+      across problem sizes} --- precisely the motivation for the graph methods.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ================================================================ IMPLEMENTATION
+\sectiondivider{Implementation\\ \&\\ Results}{%
+  \begin{itemize}
+    \item Modernisation \& porting
+    \item Restricted heuristics (online speed-ups)
+    \item Reproduction (semantic non-regression)
+    \item Where attention helps
+  \end{itemize}}{(the coding project)}
+
+\begin{frame}{Modernisation --- one self-contained PyTorch stack}
+  \begin{itemize}
+    \item Ported \textbf{both} methods from \textbf{TensorFlow~1.x + GSL} to latest
+          \texttt{torch}, \texttt{torch-geometric}, \texttt{numpy}$\geq$2, \texttt{gymnasium}
+          --- no \texttt{torch-scatter}/\texttt{sparse}, no GSL.
+    \item Graph-Q-SAT: \texttt{scatter} drop-in, gym-robust env construction, a
+          version-agnostic checkpoint loader (bridging the \texttt{GATConv} parameter
+          renames across PyG versions).
+    \item AlphaZeroSAT: re-implemented the CNN + AlphaZero loss in PyTorch; \textbf{removed
+          GSL} (Dirichlet noise via C++11 \texttt{<random>}); trains end-to-end on GPU.
+    \item Datasets unified into one shared \texttt{data/} hub; both engines kept
+          independent and runnable on Colab with Drive checkpointing.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Restricted heuristics --- trading decisions for speed}
+  Graph-Q-SAT cuts CDCL \emph{iterations} but the GNN forward at every decision can lose
+  on \emph{wall-clock}. Three online tricks (Shirokikh et al.\ 2023), all added at eval time:
+  \begin{itemize}
+    \item \textbf{early release} (\texttt{--release\_after N}): guide the first $N$
+          decisions, then hand control back to MiniSat's VSIDS;
+    \item \textbf{action pool} (\texttt{--action\_pool\_size K}): one GNN forward $\to$
+          top-$K$ actions executed without re-running the net;
+    \item \textbf{Q-value warm-start} (\texttt{--warmstart\_release}): seed VSIDS
+          activities from the root-state $Q$-values,
+          $\text{activity}(x)=-1/\max\big(Q(x,\text{T}),Q(x,\text{F})\big)$, then run pure VSIDS.
+  \end{itemize}
+  The model matters most at the cold start, where VSIDS is still blind.
 \end{frame}
 
 \begin{frame}{Reproduction (semantic non-regression)}
@@ -217,14 +520,14 @@
   \end{columns}
 \end{frame}
 
-% ================================================================== Conclusions
+% ================================================================ Conclusions
 \begin{frame}{Where the field went \& conclusions}
   \begin{itemize}
     \item Lineage: NeuroSAT $\to$ NeuroCore $\to$ NeuroComb $\to$ \textbf{NeuroBack}
           (ICLR'24): a Graph \emph{Transformer} with self-attention, \emph{offline}
           one-shot inference $\Rightarrow$ first wall-clock speed-ups on Kissat.
-    \item This \textbf{validates} the attention direction (GAT-Q-SAT) and addresses
-          Graph-Q-SAT's known limit (online inference too slow).
+    \item This \textbf{validates} the attention direction (GAT-Q-SAT / GTv2-Q-SAT) and
+          addresses Graph-Q-SAT's known limit (online inference too slow).
     \item \textbf{Our results}: graph attention helps on structured problems
           (colouring), in-distribution and under transfer, \emph{growing with size};
           not on random SAT. The fixed-size CNN (AlphaZeroSAT) cannot generalise.
@@ -233,7 +536,7 @@
   {\scriptsize Code, report and reproducible figures: \texttt{github.com/dmeoli/NeuroSAT}.}
 \end{frame}
 
-% ================================================================== Thanks
+% ================================================================ Thanks
 {\setbeamertemplate{footline}{}
 \begin{frame}[plain]
   \centering\vfill
