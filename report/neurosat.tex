@@ -226,9 +226,39 @@ advantage grows with problem size.}
 \label{tab:numbers}
 \end{table}
 
+\paragraph{Cross-domain transfer.} Uniform-random 3-SAT lacks the structure of a
+real application, so we further ask a sharper question: does the
+\emph{colouring-trained} heuristic transfer, \emph{with no retraining}, to entirely
+different structured domains? We evaluate the colouring-trained Graph-Q-SAT and
+GAT-Q-SAT checkpoints on four unseen families from SATLIB: small-world graph
+colouring (a topology shift within the training problem), AIM (controlled
+structured 3-SAT), quasigroups (combinatorial design) and planning
+(blocks-world/logistics). Figure~\ref{fig:transfer} reports the median MRIR
+(cap~200). The attention model is the more \textbf{robust} transferrer: GAT-Q-SAT
+stays at or above the MiniSat baseline (MRIR~$\ge 1$) on \textbf{three of the four}
+domains (AIM~1.29, quasigroup~1.01, planning~1.14), whereas plain Graph-Q-SAT does
+so on only \textbf{one} (AIM~1.50). On the genuinely different combinatorial and
+application domains (quasigroup, planning) GAT-Q-SAT beats MiniSat while Graph-Q-SAT
+drops below it; on AIM both transfer well (Graph marginally ahead) and on the
+small-world topology shift both fall below~$1$. Graph attention thus improves not
+only in-distribution performance but \emph{cross-domain generalisation}.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.72\textwidth]{transfer.png}
+\caption{Cross-domain transfer of the colouring-trained heuristic: median MRIR
+(cap~200) on four unseen SATLIB families. GAT-Q-SAT stays $\ge$ MiniSat on 3/4
+domains, Graph-Q-SAT on 1/4.}
+\label{fig:transfer}
+\end{figure}
+We note this is a \emph{preliminary} study: AIM (72) and small-world (60) give
+robust medians, but quasigroup (11) and planning (8) are small SATLIB families and
+the numbers there are noisier; results are single-seed at cap~200. A larger panel
+is left for future work.
+
 \paragraph{Reproducibility.} All figures and tables are regenerated from the
 evaluation logs (\texttt{GQSAT/runs/*/*.tsv}) by \texttt{aggregate\_results.py},
-\texttt{make\_plots.py} and \texttt{paper\_analysis.py} --- no manual spreadsheets.
+\texttt{make\_plots.py}, \texttt{paper\_analysis.py} and \texttt{transfer\_study.py}
+--- no manual spreadsheets.
 Training is reproducible on a Colab GPU via \texttt{notebooks/train\_colab.ipynb}
 (checkpointing to Drive with automatic resume).
 

@@ -1,0 +1,8 @@
+anomaly.cnf,3,3
+bw_large.a.cnf,30,30
+bw_large.b.cnf,187,187
+huge.cnf,30,30
+logistics.a.cnf,417,417
+logistics.b.cnf,883,917
+logistics.c.cnf,1308,1873
+medium.cnf,6,6

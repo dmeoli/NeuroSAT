@@ -553,19 +553,43 @@
   \end{columns}
 \end{frame}
 
+\begin{frame}{Results --- cross-domain transfer (no retraining)}
+  \begin{columns}[c]
+    \begin{column}{0.56\textwidth}\centering
+      \includegraphics[width=\textwidth]{transfer.png}
+    \end{column}
+    \begin{column}{0.44\textwidth}\small
+      Colouring-trained models, evaluated cold on \emph{unseen} SATLIB domains
+      (median MRIR, cap 200):
+      \begin{itemize}
+        \item \textbf{GAT-Q-SAT stays $\ge$ MiniSat on 3/4} domains (AIM, quasigroup,
+              planning); plain Graph-Q-SAT on \textbf{1/4}.
+        \item On the genuinely different domains (quasigroup, planning) \textbf{GAT
+              beats MiniSat, Graph drops below}.
+        \item Attention improves \emph{cross-domain} generalisation, not just
+              in-distribution fit.
+      \end{itemize}
+      {\scriptsize\color{gray} Preliminary: AIM (72)/small-world (60) robust;
+      quasigroup (11)/planning (8) small; single seed.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
 % ================================================================ Conclusions
 \begin{frame}{Where the field went \& conclusions}
+  \small
   \begin{itemize}
     \item Lineage: NeuroSAT $\to$ NeuroCore $\to$ NeuroComb $\to$ \textbf{NeuroBack}
-          (ICLR'24): a Graph \emph{Transformer} with self-attention, \emph{offline}
-          one-shot inference $\Rightarrow$ first wall-clock speed-ups on Kissat.
-    \item This \textbf{validates} the attention direction (GAT-Q-SAT / GTv2-Q-SAT) and
-          addresses Graph-Q-SAT's known limit (online inference too slow).
+          (ICLR'24): a Graph \emph{Transformer}, \emph{offline} inference $\Rightarrow$
+          first wall-clock speed-ups on Kissat --- \textbf{validating the attention
+          direction} (GAT-Q-SAT / GTv2-Q-SAT).
     \item \textbf{Our results}: graph attention helps on structured problems
-          (colouring), in-distribution and under transfer, \emph{growing with size};
-          not on random SAT. The fixed-size CNN (AlphaZeroSAT) cannot generalise.
+          (colouring), \emph{growing with size}, and improves \textbf{cross-domain
+          robustness} (GAT $\ge$ MiniSat on 3/4 unseen domains vs 1/4 for Graph).
+    \item The fixed-size CNN (AlphaZeroSAT) cannot generalise across sizes ---
+          the motivation for the graph methods.
   \end{itemize}
-  \vfill
+  \vspace{4mm}
   {\scriptsize Code, report and reproducible figures: \texttt{github.com/dmeoli/NeuroSAT}.}
 \end{frame}
 
