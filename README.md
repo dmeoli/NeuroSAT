@@ -39,7 +39,7 @@ stronger on uniform-random 3-SAT.
 ```
 neuroSAT/
 ├── AlphaZeroSAT/       # Alpha(Go)Zero + MCTS (PyTorch) — submodule (pure engine)
-│   ├── models_torch.py        # CNN policy/value nets (+ Model3Attn)
+│   ├── models_torch.py        # CNN policy/value nets (Model1/2/3)
 │   ├── alphazero_torch.py     # AZTrainer (AlphaZero loss + Adam)
 │   ├── train_torch.py         # self-play + supervised training driver
 │   ├── eval_torch.py          # branching-decisions evaluator (paper metric)
@@ -109,10 +109,9 @@ cd GQSAT && python evaluate.py --env-name sat-v0 --core-steps -1 --eps-final 0.0
 # regenerate result tables + plots from the logs
 cd GQSAT && python aggregate_results.py && python make_plots.py
 
-# train AlphaZeroSAT (GPU auto-detected; data from the shared ../data hub)
-cd AlphaZeroSAT && python train_torch.py --train_path ../data/uf20-91/train_v0 --device auto
-# AlphaZeroSAT with the self-attention variant (Model3Attn) + per-cycle eval
-cd AlphaZeroSAT && python train_torch.py --attention --eval_path ../data/uf20-91/test_v0 --device auto
+# train AlphaZeroSAT (GPU auto-detected; data from the shared ../data hub) + per-cycle eval
+cd AlphaZeroSAT && python train_torch.py --train_path ../data/uf20-91/train_v0 \
+    --eval_path ../data/uf20-91/test_v0 --device auto
 ```
 
 Heavy training is best run on a GPU via [`notebooks/train_colab.ipynb`](notebooks/train_colab.ipynb);

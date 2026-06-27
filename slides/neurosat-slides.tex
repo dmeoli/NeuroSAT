@@ -115,7 +115,6 @@
         \item port both from TensorFlow\,1.x\,+\,GSL to one PyTorch / PyTorch-Geometric
               stack; reproduce the published numbers \emph{exactly};
         \item \textbf{GAT-Q-SAT} and \textbf{GTv2-Q-SAT}: attention-augmented successors;
-        \item \textbf{Model3Attn}: a self-attention variant of AlphaZeroSAT;
         \item \textbf{restricted heuristics} for online speed-ups.
       \end{itemize}
     \end{column}
@@ -421,9 +420,8 @@
         \text{value } v &= \tanh(\cdot)\in[-1,1]
       \end{align*}
       invalid literals (variables absent from remaining clauses) are masked to $-\infty$.\\[1mm]
-      \textbf{Model1/2/3} differ in the heads (fc vs convolutional); \textbf{Model3Attn}
-      (this work) adds a multi-head \textbf{self-attention} block over the conv feature
-      map --- the Alpha(Go)Zero analogue of GAT-Q-SAT.
+      \textbf{Model1/2/3} differ in the heads (fully-connected vs convolutional
+      policy/value), following the original Alpha(Go)Zero-for-SAT design.
     \end{column}
     \begin{column}{0.44\textwidth}
       \footnotesize
