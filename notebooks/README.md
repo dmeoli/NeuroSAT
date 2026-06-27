@@ -1,12 +1,16 @@
 # Notebooks
 
-Colab notebooks for the project (set the runtime to **GPU** for training).
+Self-contained, end-to-end Colab pipelines &mdash; **one per model** (set the
+runtime to **GPU**). Each notebook reproduces the whole pipeline from scratch
+(setup → data → training → evaluation → results) by orchestrating the `.py`
+implementation in the submodules; reading it top-to-bottom mirrors the slides.
 
-| Notebook | Purpose |
-|----------|---------|
-| [`reproduce_gqsat.ipynb`](reproduce_gqsat.ipynb) | Reproduce the Graph-Q-SAT / GAT-Q-SAT evaluation results exactly, from the trained checkpoints in `GQSAT/runs/` (validates the modern PyTorch port against the original logs). |
-| [`train_colab.ipynb`](train_colab.ipynb) | Train both models on a GPU: Graph-Q-SAT / GAT-Q-SAT (`GQSAT/dqn.py`) and AlphaZeroSAT (`AlphaZeroSAT/train_torch.py`). Builds the native MiniSat env, runs training, and can copy checkpoints to Drive. |
+| Notebook | Model(s) | Pipeline |
+|----------|----------|----------|
+| [`graph_q_sat.ipynb`](graph_q_sat.ipynb) | Graph-Q-SAT · GAT-Q-SAT · GTv2-Q-SAT (`GQSAT/`) | clone+build → split & metadata → train the three variants (`train.sh`) → reproduce & evaluate (`evaluate.sh`) → MRIR tables/plots, cross-domain transfer, Graph-vs-GAT-vs-GTv2 verdict |
+| [`alphazero_sat.ipynb`](alphazero_sat.ipynb) | AlphaZeroSAT (`AlphaZeroSAT/`) | clone+build → train self-play (`train_torch.py`) → evaluate branching decisions (`eval_torch.py`) |
 
-Each notebook clones (or mounts) the repo, installs the modern stack
-(`torch`, `torch-geometric`, `gymnasium`, `numpy>=2`) and builds the C++ env —
-no manual setup required.
+Each notebook clones the repo with submodules, installs the modern stack
+(`torch`, `torch-geometric`, `gymnasium`, `numpy>=2`) and builds the native C++
+MiniSat environment &mdash; no manual setup. Checkpoints are written to Google
+Drive and training **auto-resumes** after a disconnect.

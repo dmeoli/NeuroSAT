@@ -1,8 +1,7 @@
 # NeuroSAT
 
-[![Reproduce GQSAT](https://img.shields.io/static/v1.svg?logo=google-colab&label=reproduce&message=GQSAT%20results&color=4b2e83)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/reproduce_gqsat.ipynb)
-[![Train GQSAT lineage](https://img.shields.io/static/v1.svg?logo=google-colab&label=train&message=Graph%2FGAT%2FGTv2-Q-SAT&color=7a4fb5)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/train_colab.ipynb)
-[![Train AlphaZeroSAT](https://img.shields.io/static/v1.svg?logo=google-colab&label=train&message=AlphaZeroSAT&color=b9a7d6)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/train_colab.ipynb)
+[![Graph-Q-SAT on Colab](https://img.shields.io/static/v1.svg?logo=google-colab&label=Colab&message=Graph%2FGAT%2FGTv2-Q-SAT&color=4b2e83)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/graph_q_sat.ipynb)
+[![AlphaZeroSAT on Colab](https://img.shields.io/static/v1.svg?logo=google-colab&label=Colab&message=AlphaZeroSAT&color=7a4fb5)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/alphazero_sat.ipynb)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Neuro-symbolic approaches to the SAT problem** — learning branching heuristics
@@ -52,7 +51,7 @@ neuroSAT/
 │   ├── aggregate_results.py   # runs/*.tsv -> results/*.md + summary.csv
 │   ├── make_plots.py          # runs/*.tsv -> img/*.png
 │   └── runs/                  # trained checkpoints + evaluation logs (.tsv)
-├── notebooks/          # reproduce_gqsat.ipynb, train_colab.ipynb (Colab)
+├── notebooks/          # graph_q_sat.ipynb, alphazero_sat.ipynb (end-to-end Colab pipelines)
 ├── data/               # shared SAT datasets, DIMACS .cnf (outside both submodules)
 │   ├── uniform-random-3-sat/  # uf/uuf 50..250
 │   ├── graph-coloring/        # flat30-60 .. flat200-479 (structured)
@@ -114,10 +113,11 @@ cd AlphaZeroSAT && python train_torch.py --train_path ../data/uf20-91/train_v0 \
     --eval_path ../data/uf20-91/test_v0 --device auto
 ```
 
-Heavy training is best run on a GPU via [`notebooks/train_colab.ipynb`](notebooks/train_colab.ipynb);
-exact reproduction of the published numbers is shown in
-[`notebooks/reproduce_gqsat.ipynb`](notebooks/reproduce_gqsat.ipynb). The
-evaluation tables live in [`GQSAT/results/`](GQSAT/results).
+Each model has a self-contained, end-to-end Colab pipeline (setup → data →
+training → evaluation → results):
+[`notebooks/graph_q_sat.ipynb`](notebooks/graph_q_sat.ipynb) for the graph models
+and [`notebooks/alphazero_sat.ipynb`](notebooks/alphazero_sat.ipynb) for
+AlphaZeroSAT. The evaluation tables live in [`GQSAT/results/`](GQSAT/results).
 
 ## License
 
