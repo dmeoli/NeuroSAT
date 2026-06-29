@@ -103,6 +103,11 @@ C++11 \texttt{<random>} facilities, so the simulation environment builds with
 nothing but \texttt{g++} and \texttt{zlib}. The pipeline trains end-to-end on
 uniform-random 3-SAT (\texttt{uf20-91}) on both CPU and GPU.
 
+\paragraph{Result.} After self-play training the policy solves the held-out
+\texttt{uf20-91} test set in $\approx\!5.4$ mean branching decisions (best $3.4$),
+down from $\sim\!15$ for an untrained network. A multi-head self-attention variant
+of the CNN was tried but did \emph{not} improve on this baseline and was dropped.
+
 \section{Method 2 --- Graph-Q-SAT and GAT-Q-SAT}
 \paragraph{Formulation~\cite{kurin2020}.} The state is a bipartite graph with
 variable nodes and clause nodes; node features are 2-D one-hot vectors and edge

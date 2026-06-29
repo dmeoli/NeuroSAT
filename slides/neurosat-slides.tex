@@ -428,7 +428,9 @@
       \textbf{Env}: MiniSat is extended into an MCTS \emph{game} supporting hypothetical
       simulations.\\[2mm]
       \textbf{Metric}: mean branching \emph{decisions} to solve (lower is better),
-      reproducing the paper's Fig.~2.\\[2mm]
+      reproducing the paper's Fig.~2.\\[1mm]
+      \textbf{Result} (uf20-91, self-play): \textbf{$\approx$5.4} mean decisions
+      (best 3.4), down from $\sim$15 for an untrained net.\\[2mm]
       \emph{Limitation}: the fixed-size matrix means the CNN \textbf{cannot generalise
       across problem sizes} --- precisely the motivation for the graph methods.
     \end{column}
