@@ -260,6 +260,27 @@ robust medians, but quasigroup (11) and planning (8) are small SATLIB families a
 the numbers there are noisier; results are single-seed at cap~200. A larger panel
 is left for future work.
 
+\paragraph{Iterations vs.\ wall-clock time.} MRIR rewards \emph{fewer CDCL
+iterations}, but each model decision is a full GNN forward pass, and attention
+makes it costlier still --- so an iteration win need not be a time win.
+Figure~\ref{fig:time} reports the median wall-clock seconds-to-solve (cap~500) per
+regime. On in-distribution colouring GAT-Q-SAT matches Graph-Q-SAT's time
+($1.1$\,s) while needing fewer iterations --- a genuine win; but on random 3-SAT
+GAT-Q-SAT is $\sim\!2\times$ slower ($6.7$\,s vs $3.2$\,s) \emph{and} reduces
+iterations less. In absolute terms the agents take $1$--$7$\,s per (tiny) instance,
+which MiniSat solves in \emph{milliseconds}: at this scale the per-decision GNN cost
+dominates and the iteration reduction does \textbf{not} translate into a wall-clock
+speed-up. This is precisely the limitation the restricted heuristics (early release /
+action pool / Q-value warm-start, and NeuroBack's offline inference) are designed
+to remove.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{time.png}
+\caption{Wall-clock companion to Figure~\ref{fig:thesis}: median seconds-to-solve
+(cap~500). Attention is slower per decision; fewer iterations $\neq$ less time.}
+\label{fig:time}
+\end{figure}
+
 \paragraph{Reproducibility.} All figures and tables are regenerated from the
 evaluation logs (\texttt{GQSAT/runs/*/*.tsv}) by \texttt{aggregate\_results.py},
 \texttt{make\_plots.py}, \texttt{paper\_analysis.py} and \texttt{transfer\_study.py}

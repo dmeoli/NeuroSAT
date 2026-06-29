@@ -575,6 +575,26 @@
   \end{columns}
 \end{frame}
 
+\begin{frame}{Results --- fewer iterations $\neq$ less wall-clock time}
+  \begin{columns}[c]
+    \begin{column}{0.56\textwidth}\centering
+      \includegraphics[width=\textwidth]{time.png}
+    \end{column}
+    \begin{column}{0.44\textwidth}\small
+      MRIR counts \emph{iterations}, but each model decision is a \textbf{GNN
+      forward} --- and attention makes it costlier:
+      \begin{itemize}
+        \item col$\to$col: same time ($1.1$s), GAT fewer iters --- a \emph{free} win.
+        \item random: GAT is \textbf{$\sim$2$\times$ slower} ($6.7$s vs $3.2$s) \emph{and}
+              reduces iterations less.
+        \item Absolute: $1$--$7$s/problem vs MiniSat's \textbf{milliseconds} ---
+              the iteration win does \emph{not} become a wall-clock win at this scale.
+      \end{itemize}
+      $\Rightarrow$ exactly what the \textbf{restricted heuristics} attack.
+    \end{column}
+  \end{columns}
+\end{frame}
+
 % ================================================================ Conclusions
 \begin{frame}{Where the field went \& conclusions}
   \small
