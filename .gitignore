@@ -16,3 +16,13 @@ __pycache__
 
 # reference PDFs (kept locally, not committed)
 papers/*.pdf
+# LaTeX build artifacts
+slides/*.nav
+slides/*.snm
+slides/*.aux
+slides/*.log
+slides/*.out
+report/*.aux
+report/*.log
+report/*.out
+**/__pycache__/

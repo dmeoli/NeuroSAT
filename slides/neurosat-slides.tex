@@ -552,15 +552,17 @@
       \includegraphics[width=\textwidth]{transfer.png}
     \end{column}
     \begin{column}{0.44\textwidth}\small
-      Colouring-trained models, evaluated cold on \emph{unseen} SATLIB domains
-      (median MRIR, cap 200):
+      \textbf{Setup}: train on graph colouring, then test \emph{without retraining} on
+      SAT from four \emph{different} families --- small-world colouring, AIM,
+      quasigroups (combinatorial design), planning. Does the heuristic transfer?
+      (median MRIR, cap 200)
       \begin{itemize}
-        \item \textbf{GAT-Q-SAT stays $\ge$ MiniSat on 3/4} domains (AIM, quasigroup,
-              planning); plain Graph-Q-SAT on \textbf{1/4}.
+        \item \textbf{GAT-Q-SAT stays $\ge$ MiniSat on 3/4} domains; plain
+              Graph-Q-SAT on \textbf{1/4}.
         \item On the genuinely different domains (quasigroup, planning) \textbf{GAT
               beats MiniSat, Graph drops below}.
-        \item Attention improves \emph{cross-domain} generalisation, not just
-              in-distribution fit.
+        \item $\Rightarrow$ attention improves \textbf{cross-domain generalisation},
+              not just in-distribution fit.
       \end{itemize}
       {\scriptsize\color{gray} Preliminary: AIM (72)/small-world (60) robust;
       quasigroup (11)/planning (8) small; single seed.}
@@ -569,21 +571,15 @@
 \end{frame}
 
 \begin{frame}{Results --- fewer iterations $\neq$ less wall-clock time}
-  \begin{columns}[c]
-    \begin{column}{0.56\textwidth}\centering
-      \includegraphics[width=\textwidth]{time.png}
-    \end{column}
-    \begin{column}{0.44\textwidth}\small
-      MRIR counts \emph{iterations}, but each model decision is a \textbf{GNN
-      forward} --- and attention makes it costlier:
-      \begin{itemize}
-        \item col$\to$col: same time ($1.1$s), GAT fewer iters --- a \emph{free} win.
-        \item random: GAT is \textbf{$\sim$2$\times$ slower} ($6.7$s vs $3.2$s) \emph{and}
-              reduces iterations less.
-        \item Absolute: $1$--$7$s/problem vs MiniSat's \textbf{milliseconds} ---
-              the iteration win does \emph{not} become a wall-clock win at this scale.
-      \end{itemize}
-      $\Rightarrow$ exactly what the \textbf{restricted heuristics} attack.
+  \centering
+  \includegraphics[width=0.92\textwidth]{mrir_time.png}\\[1.5mm]
+  \begin{columns}
+    \begin{column}{0.92\textwidth}\footnotesize
+      Each decision is a \textbf{GNN forward}, so the iteration win (left) need not be a
+      time win (right): on \textbf{col$\to$col} GAT is fewer iters at the \emph{same}
+      $1.1$s, but on \textbf{random} it is $\sim$2$\times$ slower ($6.7$s vs $3.2$s).
+      Absolute: $1$--$7$s/problem vs MiniSat's \textbf{ms} --- exactly what the
+      \textbf{restricted heuristics} attack.
     \end{column}
   \end{columns}
 \end{frame}
