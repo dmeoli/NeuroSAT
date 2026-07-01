@@ -24,8 +24,17 @@ published results are **reproduced exactly**.
 | **Graph-Q-SAT** | DQN + Graph Neural Network ([GNN](https://arxiv.org/abs/1806.01261)) [2] | PyTorch + PyG | [`GQSAT/`](GQSAT) |
 | **GAT-Q-SAT** | Graph-Q-SAT + [Graph Attention](https://arxiv.org/abs/1710.10903) (this project) | PyTorch + PyG | [`GQSAT/`](GQSAT) |
 
-**Key finding:** graph attention (GAT-Q-SAT) helps on *structured* problems (graph
-colouring), while plain Graph-Q-SAT is stronger on uniform-random 3-SAT.
+**Key findings:**
+- **GAT-Q-SAT** (graph attention) beats plain Graph-Q-SAT on *structured* problems
+  (graph colouring), in-distribution and *growing with size*, and **transfers better
+  to unseen domains** (stays ≥ MiniSat on 3/4 cross-domain families vs 1/4 for
+  Graph-Q-SAT); plain Graph-Q-SAT is stronger on uniform-random 3-SAT.
+- **Iterations ≠ wall-clock:** fewer CDCL iterations (MRIR > 1) is not less *time* —
+  each decision is a GNN forward (attention costlier still), so the agents take
+  ~1–7 s/problem vs MiniSat's milliseconds; the *restricted heuristics* attack this.
+- **AlphaZeroSAT** learns a heuristic from self-play (~5.4 mean decisions), but each
+  MCTS decision (~160 ms) makes it ~0.9 s/problem — same time caveat — and the
+  fixed-size CNN cannot generalise across sizes.
 
 | Graph-Q-SAT | GAT-Q-SAT |
 |:-:|:-:|

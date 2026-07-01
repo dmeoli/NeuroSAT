@@ -423,7 +423,10 @@
       \textbf{Metric}: mean branching \emph{decisions} to solve (lower is better),
       reproducing the paper's Fig.~2.\\[1mm]
       \textbf{Result} (uf20-91, self-play): \textbf{$\approx$5.4} mean decisions
-      (best 3.4), down from $\sim$15 for an untrained net.\\[2mm]
+      (best 3.4), down from $\sim$15 for an untrained net.\\[1mm]
+      \textbf{But wall-clock}: each decision is an MCTS search ($\approx$160\,ms/CPU)
+      $\Rightarrow\approx$0.9\,s/problem vs MiniSat's \textbf{ms} --- same time caveat
+      as the graph models.\\[2mm]
       \emph{Limitation}: the fixed-size matrix means the CNN \textbf{cannot generalise
       across problem sizes} --- precisely the motivation for the graph methods.
     \end{column}
@@ -551,21 +554,18 @@
     \begin{column}{0.56\textwidth}\centering
       \includegraphics[width=\textwidth]{transfer.png}
     \end{column}
-    \begin{column}{0.44\textwidth}\small
-      \textbf{Setup}: train on graph colouring, then test \emph{without retraining} on
-      SAT from four \emph{different} families --- small-world colouring, AIM,
-      quasigroups (combinatorial design), planning. Does the heuristic transfer?
-      (median MRIR, cap 200)
+    \begin{column}{0.44\textwidth}\footnotesize
+      \textbf{Setup}: train on graph colouring, test \emph{without retraining} on four
+      \emph{different} SAT families (small-world, AIM, quasigroups, planning);
+      median MRIR, cap 200.
       \begin{itemize}
         \item \textbf{GAT-Q-SAT stays $\ge$ MiniSat on 3/4} domains; plain
               Graph-Q-SAT on \textbf{1/4}.
-        \item On the genuinely different domains (quasigroup, planning) \textbf{GAT
-              beats MiniSat, Graph drops below}.
-        \item $\Rightarrow$ attention improves \textbf{cross-domain generalisation},
-              not just in-distribution fit.
+        \item On the genuinely different domains \textbf{GAT beats MiniSat, Graph
+              drops below}.
+        \item $\Rightarrow$ attention improves \textbf{cross-domain generalisation}.
       \end{itemize}
-      {\scriptsize\color{gray} Preliminary: AIM (72)/small-world (60) robust;
-      quasigroup (11)/planning (8) small; single seed.}
+      {\scriptsize\color{gray} Preliminary: quasigroup (11)/planning (8) small; single seed.}
     \end{column}
   \end{columns}
 \end{frame}

@@ -105,7 +105,11 @@ uniform-random 3-SAT (\texttt{uf20-91}) on both CPU and GPU.
 
 \paragraph{Result.} After self-play training the policy solves the held-out
 \texttt{uf20-91} test set in $\approx\!5.4$ mean branching decisions (best $3.4$),
-down from $\sim\!15$ for an untrained network.
+down from $\sim\!15$ for an untrained network. As with the graph models, this
+decision count does not translate into wall-clock speed: each decision runs an MCTS
+search ($\approx\!160$\,ms on CPU), so a solve takes $\approx\!0.9$\,s per instance
+--- orders of magnitude slower than MiniSat's milliseconds, and heavier still than a
+single GNN forward.
 
 \section{Method 2 --- Graph-Q-SAT and GAT-Q-SAT}
 \paragraph{Formulation~\cite{kurin2020}.} The state is a bipartite graph with
