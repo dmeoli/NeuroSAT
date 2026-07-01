@@ -10,7 +10,7 @@ Files are named `YYYY - Authors - Full title.pdf`.
 ## Follow-up / related lineage
 - **NeuroSAT** — Selsam, Lamm, Bünz, Liang, de Moura & Dill, *Learning a SAT Solver from Single-Bit Supervision* (ICLR 2019). [arXiv:1802.03685](https://arxiv.org/abs/1802.03685)
 - **NeuroCore** — Selsam & Bjørner, *Guiding High-Performance SAT Solvers with Unsat-Core Predictions* (2019). [arXiv:1903.04671](https://arxiv.org/abs/1903.04671)
-- **NeuroBack** — Wang, Hu, Tiwari, Khurshid, McMillan & Miikkulainen, *NeuroBack: Improving CDCL SAT Solving using Graph Neural Networks* (ICLR 2024). [arXiv:2110.14053](https://arxiv.org/abs/2110.14053) — **inspires our GTv2-Q-SAT** (GATv2 + Transformer-block successor to GAT-Q-SAT).
+- **NeuroBack** — Wang, Hu, Tiwari, Khurshid, McMillan & Miikkulainen, *NeuroBack: Improving CDCL SAT Solving using Graph Neural Networks* (ICLR 2024). [arXiv:2110.14053](https://arxiv.org/abs/2110.14053).
 - **ML for SAT** — Shirokikh, Shenbin, Alekseev & Nikolenko, *Machine Learning for SAT: Restricted Heuristics and New Graph Representations* (2023). [arXiv:2307.09141](https://arxiv.org/abs/2307.09141) — the engineering tricks we evaluate as option #2 (Q-value warm-start, action pool, early release to VSIDS).
 - **Survey** — Mojžíšek, Hůla, Li, Zhou & Janota, *Neural Approaches to SAT Solving: Design Choices and Interpretability* (2025). [arXiv:2504.01173](https://arxiv.org/abs/2504.01173)
 - **HyperSAT** — Chen, Tan, Gao & Lü, *HyperSAT: Unsupervised Hypergraph Neural Networks for Weighted MaxSAT Problems* (2025). [arXiv:2504.11885](https://arxiv.org/abs/2504.11885)

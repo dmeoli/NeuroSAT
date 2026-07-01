@@ -1,6 +1,6 @@
 # NeuroSAT
 
-[![Graph-Q-SAT on Colab](https://img.shields.io/static/v1.svg?logo=google-colab&label=Colab&message=Graph%2FGAT%2FGTv2-Q-SAT&color=4b2e83)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/graph_q_sat.ipynb)
+[![Graph-Q-SAT on Colab](https://img.shields.io/static/v1.svg?logo=google-colab&label=Colab&message=Graph%2FGAT-Q-SAT&color=4b2e83)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/graph_q_sat.ipynb)
 [![AlphaZeroSAT on Colab](https://img.shields.io/static/v1.svg?logo=google-colab&label=Colab&message=AlphaZeroSAT&color=7a4fb5)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/alphazero_sat.ipynb)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -23,11 +23,9 @@ published results are **reproduced exactly**.
 | **AlphaZeroSAT** | Alpha(Go)Zero + MCTS over a CNN policy/value net [1] | PyTorch | [`AlphaZeroSAT/`](AlphaZeroSAT) |
 | **Graph-Q-SAT** | DQN + Graph Neural Network ([GNN](https://arxiv.org/abs/1806.01261)) [2] | PyTorch + PyG | [`GQSAT/`](GQSAT) |
 | **GAT-Q-SAT** | Graph-Q-SAT + [Graph Attention](https://arxiv.org/abs/1710.10903) (this project) | PyTorch + PyG | [`GQSAT/`](GQSAT) |
-| **GTv2-Q-SAT** | GAT-Q-SAT + [GATv2](https://arxiv.org/abs/2105.14491) Transformer block, à la [NeuroBack](https://arxiv.org/abs/2110.14053) (this project) | PyTorch + PyG | [`GQSAT/`](GQSAT) |
 
-**Key finding:** graph attention (GAT-Q-SAT, and its GATv2 successor GTv2-Q-SAT)
-helps on *structured* problems (graph colouring), while plain Graph-Q-SAT is
-stronger on uniform-random 3-SAT.
+**Key finding:** graph attention (GAT-Q-SAT) helps on *structured* problems (graph
+colouring), while plain Graph-Q-SAT is stronger on uniform-random 3-SAT.
 
 | Graph-Q-SAT | GAT-Q-SAT |
 |:-:|:-:|
@@ -44,7 +42,7 @@ neuroSAT/
 │   ├── eval_torch.py          # branching-decisions evaluator (paper metric)
 │   ├── mct.py, sl_buffer_d.py # MCTS glue + replay buffer
 │   └── MCTSminisat/           # MCTS-aware MiniSat env (GSL-free, build_so.sh)
-├── GQSAT/              # Graph-Q-SAT / GAT-Q-SAT / GTv2-Q-SAT (DQN + GNN) — submodule (pure engine)
+├── GQSAT/              # Graph-Q-SAT / GAT-Q-SAT (DQN + GNN) — submodule (pure engine)
 │   ├── gqsat/                 # models, learners, agents, buffer, utils
 │   ├── minisat/               # patched MiniSat + gym env (submodule)
 │   ├── dqn.py, evaluate.py    # training / evaluation

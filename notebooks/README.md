@@ -7,7 +7,7 @@ implementation in the submodules; reading it top-to-bottom mirrors the slides.
 
 | Notebook | Model(s) | Pipeline |
 |----------|----------|----------|
-| [`graph_q_sat.ipynb`](graph_q_sat.ipynb) | Graph-Q-SAT · GAT-Q-SAT · GTv2-Q-SAT (`GQSAT/`) | clone+build → split & metadata → train the three variants (`train.sh`) → reproduce & evaluate (`evaluate.sh`) → MRIR tables/plots, cross-domain transfer, Graph-vs-GAT-vs-GTv2 verdict |
+| [`graph_q_sat.ipynb`](graph_q_sat.ipynb) | Graph-Q-SAT · GAT-Q-SAT (`GQSAT/`) | clone+build → split & metadata → train the two variants (`train.sh`) → reproduce & evaluate (`evaluate.sh`) → MRIR tables/plots, cross-domain transfer, Graph-vs-GAT comparison |
 | [`alphazero_sat.ipynb`](alphazero_sat.ipynb) | AlphaZeroSAT (`AlphaZeroSAT/`) | clone+build → train self-play (`train_torch.py`) → evaluate branching decisions (`eval_torch.py`) |
 
 Each notebook clones the repo with submodules, installs the modern stack

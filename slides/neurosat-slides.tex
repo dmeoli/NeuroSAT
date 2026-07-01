@@ -114,7 +114,7 @@
       \begin{itemize}
         \item port both from TensorFlow\,1.x\,+\,GSL to one PyTorch / PyTorch-Geometric
               stack; reproduce the published numbers \emph{exactly};
-        \item \textbf{GAT-Q-SAT} and \textbf{GTv2-Q-SAT}: attention-augmented successors;
+        \item \textbf{GAT-Q-SAT}: an attention-augmented successor;
         \item \textbf{restricted heuristics} for online speed-ups.
       \end{itemize}
     \end{column}
@@ -220,7 +220,7 @@
     \item Reinforcement learning for branching
     \item Background \begin{itemize}\item Deep Q-Learning (DQN)\item Graph Networks\end{itemize}
     \item Model --- encode--process--decode
-    \item Graph Attention (GAT, GATv2)
+    \item Graph Attention (GAT)
     \item Results
   \end{itemize}}{(ISPR + RL -- survey with extra coding)\\[2mm]
   Kurin et al., \emph{Can Q-Learning with Graph Networks Learn a Generalizable
@@ -321,7 +321,7 @@
   \end{itemize}
   \vfill
   {\footnotesize\color{gray} Veli\v{c}kovi\'c et al., \emph{Graph Attention Networks}
-  (ICLR 2018); Brody et al., \emph{How Attentive are GATs?} (ICLR 2022).}
+  (ICLR 2018).}
 \end{frame}
 
 \begin{frame}{Graph Attention Networks (GAT)}
@@ -339,22 +339,15 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{GAT-Q-SAT \& GTv2-Q-SAT --- our attention successors}
+\begin{frame}{GAT-Q-SAT --- our attention successor}
   \begin{columns}[c]
     \begin{column}{0.46\textwidth}
       \footnotesize
-      \textbf{GAT-Q-SAT}: inject two edge-aware multi-head \texttt{GATConv} layers into
-      the core block (the non-local block, right).\\[2mm]
-      \textbf{GTv2-Q-SAT} (further successor, inspired by NeuroBack): a \emph{pre-norm
-      Transformer block} on \textbf{GATv2}, which makes attention \emph{dynamic} by moving
-      the nonlinearity before $\mathbf a$:
-      \[
-        e_{ij}=\mathbf a^{\!\top}\,\text{LeakyReLU}\big(W[\,h_i\,\|\,h_j\,]\big)
-      \]
-      \[
-        h' = \text{LN}\big(h + \text{GATv2}(h) + \text{FFN}(h)\big)
-      \]
-      lineage: \textbf{Graph-Q-SAT $\to$ GAT-Q-SAT $\to$ GTv2-Q-SAT}.
+      \textbf{GAT-Q-SAT (this work)}: replace the uniform neighbour aggregation in the
+      core block with two edge-aware, multi-head \texttt{GATConv} layers (the
+      \emph{non-local} block, right), so the network can weight the most relevant
+      neighbouring clauses/variables.\\[2mm]
+      lineage: \textbf{Graph-Q-SAT $\to$ GAT-Q-SAT}.
     \end{column}
     \begin{column}{0.54\textwidth}
       \centering
@@ -602,7 +595,7 @@
     \item Lineage: NeuroSAT $\to$ NeuroCore $\to$ NeuroComb $\to$ \textbf{NeuroBack}
           (ICLR'24): a Graph \emph{Transformer}, \emph{offline} inference $\Rightarrow$
           first wall-clock speed-ups on Kissat --- \textbf{validating the attention
-          direction} (GAT-Q-SAT / GTv2-Q-SAT).
+          direction} (GAT-Q-SAT).
     \item \textbf{Our results}: graph attention helps on structured problems
           (colouring), \emph{growing with size}, and improves \textbf{cross-domain
           robustness} (GAT $\ge$ MiniSat on 3/4 unseen domains vs 1/4 for Graph).

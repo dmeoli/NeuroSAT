@@ -14,7 +14,7 @@ graphs).
   random. `sw100-8-p0-c5` (1 instance) is the fully-random reference.
 
 This spectrum makes the set ideal for an **ablation of the attention advantage vs.
-structure level**: Graph-Q-SAT (baseline) → GAT-Q-SAT → GTv2-Q-SAT should diverge
+structure level**: Graph-Q-SAT (baseline) vs GAT-Q-SAT should diverge
 most on the strongly-structured (low-index) families and converge toward random.
 
 Split into train/val/test with the repo helper:
