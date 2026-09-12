@@ -1,7 +1,7 @@
 # Small-world graph colouring (SATLIB SW-GCP)
 
-Structured SAT instances added to strengthen the **"attention helps on structured
-problems"** thesis (a complement to `../graph-coloring`, which uses *flat* random
+Structured SAT instances added to test the claim that attention helps on
+structured problems (a complement to `../graph-coloring`, which uses *flat* random
 graphs).
 
 - **Source:** SATLIB, *Small-World Graph Colouring* (SW-GCP),
@@ -13,9 +13,10 @@ graphs).
   graphs (strong local structure), higher indices are progressively rewired toward
   random. `sw100-8-p0-c5` (1 instance) is the fully-random reference.
 
-This spectrum makes the set ideal for an **ablation of the attention advantage vs.
-structure level**: Graph-Q-SAT (baseline) vs GAT-Q-SAT should diverge
-most on the strongly-structured (low-index) families and converge toward random.
+The spectrum makes the set suitable for an ablation of the attention advantage
+against the level of structure: Graph-Q-SAT and GAT-Q-SAT should diverge most on
+the strongly structured (low-index) families, and converge as the graphs are
+rewired toward random.
 
 Split into train/val/test with the repo helper:
 

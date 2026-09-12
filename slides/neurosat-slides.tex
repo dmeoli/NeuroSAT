@@ -84,16 +84,16 @@
   \begin{itemize}
     \item \textbf{SAT}: given a Boolean formula in CNF
           $\varphi=\bigwedge_i \big(\bigvee_j \ell_{ij}\big)$, is there an assignment
-          of the variables that makes it true? First problem proven NP-complete;
-          the engine of verification, planning, synthesis.
+          of the variables that makes it true? The first problem proven NP-complete,
+          and the engine of verification, planning and synthesis.
     \item Modern solvers are \textbf{CDCL}: \emph{decide} a variable, \emph{unit-propagate},
           on a \emph{conflict} learn a clause and \emph{backtrack}.
     \item The \textbf{branching heuristic} (which variable to decide next, e.g.\ VSIDS)
-          drives performance --- yet it makes poor choices during its warm-up phase,
-          when activity scores are still uninformative.
-    \item \emph{This project}: \textbf{learn the branching heuristic} with two
-          neuro-symbolic methods, modernise them to PyTorch, study \textbf{where graph
-          attention helps}, and reproduce the published results.
+          drives performance, but it decides poorly in its ``warm-up'' phase, when the
+          activity counters are still uninformative.
+    \item \emph{This project}: learn the branching heuristic with two neuro-symbolic
+          methods, port them to PyTorch, reproduce the published results, and measure
+          where graph attention helps.
   \end{itemize}
 \end{frame}
 
@@ -103,10 +103,10 @@
     \begin{column}{0.5\textwidth}
       \textbf{Two ways to learn a SAT heuristic:}
       \begin{itemize}
-        \item \textbf{Graph-Q-SAT} --- value-based RL (DQN) over a \emph{graph} neural
-              network on the CNF graph. Size-agnostic.
-        \item \textbf{AlphaZeroSAT} --- self-play + MCTS over a \emph{CNN} policy/value
-              net on the clause\,$\times$\,variable matrix. Fixed size.
+        \item \textbf{Graph-Q-SAT}: value-based RL (DQN) over a \emph{graph} neural
+              network on the CNF graph; size-agnostic.
+        \item \textbf{AlphaZeroSAT}: self-play + MCTS over a \emph{CNN} policy/value
+              net on the clause\,$\times$\,variable matrix; fixed size.
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}
@@ -114,7 +114,7 @@
       \begin{itemize}
         \item port both from TensorFlow\,1.x\,+\,GSL to one PyTorch / PyTorch-Geometric
               stack; reproduce the published numbers \emph{exactly};
-        \item \textbf{GAT-Q-SAT}: an attention-augmented successor;
+        \item \textbf{GAT-Q-SAT}: an attention-augmented variant;
         \item \textbf{restricted heuristics} for online speed-ups.
       \end{itemize}
     \end{column}
@@ -129,7 +129,7 @@
   \begin{itemize}
     \item The CNF as a graph
     \item Message Passing Neural Networks (MPNNs)
-    \item NeuroSAT --- the seminal graph model for SAT
+    \item NeuroSAT, the first graph model for SAT
   \end{itemize}}{(ISPR -- survey)\\[2mm]
   Gilmer et al., \emph{Neural Message Passing for Quantum Chemistry}.\\
   Selsam et al., \emph{Learning a SAT Solver from Single-Bit Supervision}.}
@@ -146,8 +146,8 @@
       \end{itemize}
       \vspace{2mm}
       This representation is \textbf{permutation-invariant} and \textbf{size-agnostic}:
-      the same network handles formulas of any size --- the property the fixed-size CNN
-      lacks. It is the substrate shared by NeuroSAT and Graph-Q-SAT.
+      the same network handles formulas of any size, which is the property that the
+      fixed-size CNN lacks. It is the substrate shared by NeuroSAT and Graph-Q-SAT.
     \end{column}
     \begin{column}{0.4\textwidth}
       \centering
@@ -181,7 +181,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{NeuroSAT --- a SAT solver from single-bit supervision}
+\begin{frame}{NeuroSAT: a SAT solver from single-bit supervision}
   \begin{columns}[t]
     \begin{column}{0.54\textwidth}
       \footnotesize
@@ -203,10 +203,10 @@
     \begin{column}{0.46\textwidth}
       \begin{itemize}
         \item Trained \emph{only} as a SAT/UNSAT classifier (one bit per formula).
-        \item Yet it \textbf{learns to find satisfying assignments}: it guesses UNSAT
-              with low confidence until a solution crystallises in the literal votes.
-        \item Establishes the \textbf{graph view} of a CNF --- the foundation for
-              Graph-Q-SAT.
+        \item Yet it learns to find satisfying assignments: it guesses UNSAT with low
+              confidence until a solution crystallises in the literal votes.
+        \item Establishes the \textbf{graph view} of a CNF, on which Graph-Q-SAT is
+              built.
         \item \emph{Limitation}: a standalone solver, not competitive in wall-clock
               with CDCL.
       \end{itemize}
@@ -219,7 +219,7 @@
   \begin{itemize}
     \item Reinforcement learning for branching
     \item Background \begin{itemize}\item Deep Q-Learning (DQN)\item Graph Networks\end{itemize}
-    \item Model --- encode--process--decode
+    \item Model: encode--process--decode
     \item Graph Attention (GAT)
     \item Results
   \end{itemize}}{(ISPR + RL -- survey with extra coding)\\[2mm]
@@ -231,7 +231,7 @@
   \begin{itemize}
     \item \textbf{state} $s$: the current CNF as a bipartite graph (variable/clause nodes,
           polarity edges, a global attribute);
-    \item \textbf{action} $a$: assign an unassigned variable True/False --- one decision;
+    \item \textbf{action} $a$: assign an unassigned variable True/False, i.e., one decision;
     \item \textbf{reward} $r=-p$ at every non-terminal step, $0$ at termination
           $\Rightarrow$ maximising the return \emph{minimises the number of decisions};
     \item \textbf{return} $G_t=\sum_{k\ge 0}\gamma^{k}\,r_{t+k}$.
@@ -262,7 +262,7 @@
   must be a \textbf{graph} network that scores each variable node.
 \end{frame}
 
-\begin{frame}{Model --- the encode--process--decode graph network}
+\begin{frame}{Model: the encode--process--decode graph network}
   \begin{columns}[c]
     \begin{column}{0.4\textwidth}
       \footnotesize
@@ -292,12 +292,12 @@
         \item node features: 2-D one-hot (variable / clause); edge feature: polarity;
               global: empty.
         \item encoder/core/decoder hidden size $64$; $M$ core message-passing steps
-              (a key knob at test time);
+              (the knob that matters at test time);
         \item DQN: Adam, target-net sync, prioritised replay, $\gamma\!\approx\!0.99$.
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \textbf{Metric --- MRIR:}
+      \textbf{Metric, MRIR:}
       \[
         \text{MRIR}=\operatorname{median}\frac{\#\text{iters}_{\text{MiniSat}}}{\#\text{iters}_{\text{model}}}
       \]
@@ -313,11 +313,11 @@
     \item In the core block, a node aggregates \emph{all} neighbours with equal weight
           ($\rho$ = sum). But not all neighbouring clauses/variables are equally relevant
           to a branching decision.
-    \item \textbf{Idea}: replace the uniform aggregation with a \textbf{learned,
-          edge-aware attention} over neighbours, so the network can encode more abstract
+    \item \textbf{Idea}: replace the uniform aggregation with a learned, edge-aware
+          attention over the neighbours, so that the network can encode more abstract
           dependencies in the SAT graph.
-    \item This is the \emph{non-local} graph-network variant --- a \textbf{Graph Attention
-          Network (GAT)} inside the core.
+    \item This is the \emph{non-local} graph-network variant, i.e., a Graph Attention
+          Network (GAT) inside the core.
   \end{itemize}
   \vfill
   {\footnotesize\color{gray} Veli\v{c}kovi\'c et al., \emph{Graph Attention Networks}
@@ -339,7 +339,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{GAT-Q-SAT --- our attention successor}
+\begin{frame}{GAT-Q-SAT: the attention variant}
   \begin{columns}[c]
     \begin{column}{0.46\textwidth}
       \footnotesize
@@ -352,7 +352,7 @@
     \begin{column}{0.54\textwidth}
       \centering
       \includegraphics[width=\textwidth]{gatqsat_epd.png}\\
-      {\scriptsize the core becomes a \emph{non-local} GN block --- a GAT with edge
+      {\scriptsize the core becomes a \emph{non-local} GN block, a GAT with edge
       attention $\alpha^e,\beta^e$.}
     \end{column}
   \end{columns}
@@ -363,7 +363,7 @@
   \begin{itemize}
     \item Search-based RL for branching
     \item Background \begin{itemize}\item Monte Carlo Tree Search (MCTS)\item AlphaZero self-play\end{itemize}
-    \item Model --- CNN policy/value net
+    \item Model: CNN policy/value net
     \item Results
   \end{itemize}}{(ISPR + RL -- survey with coding)\\[2mm]
   Wang \& Rompf, \emph{From Gameplay to Symbolic Reasoning: Learning SAT Solver
@@ -385,14 +385,14 @@
   $\pi(a\mid s)\propto N(s,a)^{1/\tau}$.
 \end{frame}
 
-\begin{frame}{AlphaZero --- self-play policy iteration}
+\begin{frame}{AlphaZero: self-play policy iteration}
   A single network $(p,v)=f_\theta(s)$ outputs a \textbf{policy} $p$ over moves and a
   \textbf{value} $v\in[-1,1]$ (probability of solving from $s$).
   \begin{itemize}
     \item \textbf{Self-play}: MCTS, guided by $f_\theta$, produces a stronger policy
           $\pi$; play it to the end to obtain an outcome $z$.
-    \item \textbf{Learn}: regress $v\!\to\!z$ and $p\!\to\!\pi$ --- MCTS is the policy-improvement
-          operator, the network is the policy-evaluation operator:
+    \item \textbf{Learn}: regress $v\!\to\!z$ and $p\!\to\!\pi$; MCTS is the policy-improvement
+          operator, the network the policy-evaluation one:
       \[
         \ell=\underbrace{(z-v)^2}_{\text{value}}\;\underbrace{-\,\pi^{\!\top}\!\log p}_{\text{policy (cross-entropy)}}\;+\;\underbrace{c\lVert\theta\rVert^2}_{\text{regularisation}} .
       \]
@@ -400,7 +400,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{AlphaZeroSAT --- the model}
+\begin{frame}{AlphaZeroSAT: the model}
   \begin{columns}[t]
     \begin{column}{0.56\textwidth}
       \footnotesize
@@ -424,11 +424,11 @@
       reproducing the paper's Fig.~2.\\[1mm]
       \textbf{Result} (uf20-91, self-play): \textbf{$\approx$5.4} mean decisions
       (best 3.4), down from $\sim$15 for an untrained net.\\[1mm]
-      \textbf{But wall-clock}: each decision is an MCTS search ($\approx$160\,ms/CPU)
-      $\Rightarrow\approx$0.9\,s/problem vs MiniSat's \textbf{ms} --- same time caveat
-      as the graph models.\\[2mm]
-      \emph{Limitation}: the fixed-size matrix means the CNN \textbf{cannot generalise
-      across problem sizes} --- precisely the motivation for the graph methods.
+      \textbf{Wall-clock}: each decision is an MCTS search ($\approx$160\,ms/CPU), hence
+      $\approx$0.9\,s/problem against MiniSat's milliseconds; the same caveat as for the
+      graph models.\\[2mm]
+      \emph{Limitation}: with a fixed-size matrix the CNN cannot generalise across
+      problem sizes, which is the motivation for the graph methods.
     \end{column}
   \end{columns}
 \end{frame}
@@ -442,22 +442,23 @@
     \item Where attention helps
   \end{itemize}}{(the coding project)}
 
-\begin{frame}{Modernisation --- one self-contained PyTorch stack}
+\begin{frame}{Modernisation: one self-contained PyTorch stack}
   \begin{itemize}
-    \item Ported \textbf{both} methods from \textbf{TensorFlow~1.x + GSL} to latest
-          \texttt{torch}, \texttt{torch-geometric}, \texttt{numpy}$\geq$2, \texttt{gymnasium}
-          --- no \texttt{torch-scatter}/\texttt{sparse}, no GSL.
+    \item Ported both methods from \textbf{TensorFlow~1.x + GSL} to the current
+          \texttt{torch}, \texttt{torch-geometric}, \texttt{numpy}$\geq$2 and
+          \texttt{gymnasium} (no \texttt{torch-scatter}/\texttt{sparse}, no GSL).
     \item Graph-Q-SAT: \texttt{scatter} drop-in, gym-robust env construction, a
           version-agnostic checkpoint loader (bridging the \texttt{GATConv} parameter
           renames across PyG versions).
-    \item AlphaZeroSAT: re-implemented the CNN + AlphaZero loss in PyTorch; \textbf{removed
-          GSL} (Dirichlet noise via C++11 \texttt{<random>}); trains end-to-end on GPU.
+    \item AlphaZeroSAT: re-implemented the CNN + AlphaZero loss in PyTorch; removed the
+          GSL dependency (Dirichlet noise via C++11 \texttt{<random>}); trains end to end
+          on GPU.
     \item Datasets unified into one shared \texttt{data/} hub; both engines kept
           independent and runnable on Colab with Drive checkpointing.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Restricted heuristics --- trading decisions for speed}
+\begin{frame}{Restricted heuristics: trading decisions for time}
   Graph-Q-SAT cuts CDCL \emph{iterations} but the GNN forward at every decision can lose
   on \emph{wall-clock}. Three online tricks (Shirokikh et al.\ 2023), all added at eval time:
   \begin{itemize}
@@ -469,14 +470,14 @@
           activities from the root-state $Q$-values,
           $\text{activity}(x)=-1/\max\big(Q(x,\text{T}),Q(x,\text{F})\big)$, then run pure VSIDS.
   \end{itemize}
-  The model matters most at the cold start, where VSIDS is still blind.
+  The model matters most at the cold start, where VSIDS has no information yet.
 \end{frame}
 
 \begin{frame}{Reproduction (semantic non-regression)}
   \begin{itemize}
     \item Re-ran the \emph{original trained checkpoints} on the modern stack
           (latest torch / PyG / numpy$\geq$2 / gymnasium).
-    \item MRIR matches the committed logs \textbf{exactly}:
+    \item MRIR matches the committed logs exactly:
   \end{itemize}
   \begin{center}\small
   \begin{tabular}{lcc}
@@ -486,31 +487,32 @@
   \end{tabular}
   \end{center}
   \begin{itemize}
-    \item Drop-in changes only (scatter, env construction, GATConv key remap) ---
-          \textbf{semantics preserved}. Figures regenerated from the logs (no Sheets).
+    \item Drop-in changes only (scatter, env construction, GATConv key remap), so the
+          semantics are preserved. Figures regenerated from the logs, with no spreadsheet
+          in between.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Results --- the central finding}
+\begin{frame}{Results: attention on and off, matched training set}
   \begin{columns}
     \begin{column}{0.58\textwidth}\centering
       \includegraphics[width=\textwidth]{thesis.png}
     \end{column}
     \begin{column}{0.42\textwidth}
-      Clean attention on/off ablation, matched training sets (mean MRIR, cap 500):
+      Attention on and off at matched training set (mean MRIR, cap 500):
       \begin{itemize}
-        \item \textbf{Colouring} (in-dist): GAT \textbf{2.97} vs 2.04.
-        \item \textbf{Transfer} random$\to$colouring: GAT \textbf{1.53} vs 0.94
-              (Graph-Q-SAT $<1$, i.e.\ worse than MiniSat!).
-        \item \textbf{Random} 3-SAT: attention \emph{does not} help (1.52 vs 2.19).
+        \item \textbf{Colouring}, in distribution: GAT $2.97$ against $2.04$.
+        \item \textbf{Transfer} random$\to$colouring: GAT $1.53$ against $0.94$, i.e.,
+              Graph-Q-SAT below $1$ and thus worse than MiniSat.
+        \item \textbf{Random} 3-SAT: attention does not help ($1.52$ against $2.19$).
       \end{itemize}
     \end{column}
   \end{columns}
   \vspace{1mm}
-  \centerline{\footnotesize \textbf{Attention helps on structured problems, not on uniform-random SAT.}}
+  \centerline{\footnotesize Attention helps on structured problems; on uniform-random SAT it does not.}
 \end{frame}
 
-\begin{frame}{Results --- MRIR curves on graph colouring}
+\begin{frame}{Results: MRIR curves on graph colouring}
   \begin{columns}
     \begin{column}{0.5\textwidth}\centering
       \includegraphics[width=\textwidth]{graphqsat.png}
@@ -521,12 +523,12 @@
   \end{columns}
   \vspace{1mm}
   \begin{center}\footnotesize
-  Iteration improvement vs the decision budget, one line per \texttt{flat} family ---
-  \textbf{GAT-Q-SAT lifts the whole curve} on every size.
+  Iteration improvement against the decision budget, one line per \texttt{flat} family;
+  GAT-Q-SAT lifts the whole curve at every size.
   \end{center}
 \end{frame}
 
-\begin{frame}{Results --- attention helps more on \emph{larger} structured problems}
+\begin{frame}{Results: the advantage grows with the size}
   \begin{columns}
     \begin{column}{0.52\textwidth}\centering
       \includegraphics[width=\textwidth]{generalization.png}\\[-1mm]
@@ -540,16 +542,16 @@
         flat30-60   & 1.83 & 2.00 & +0.17 \\
         flat125-301 & 2.55 & 3.44 & +0.88 \\
         flat150-360 & 1.92 & 3.76 & +1.85 \\
-        flat200-479 & 1.35 & 3.39 & \textbf{+2.04} \\\bottomrule
+        flat200-479 & 1.35 & 3.39 & +2.04 \\\bottomrule
       \end{tabular}
       \end{center}
-      Plain Graph-Q-SAT \textbf{degrades} on large instances; GAT-Q-SAT holds up ---
-      the advantage \textbf{grows with size}.
+      Plain Graph-Q-SAT degrades on the large instances while GAT-Q-SAT holds up, so the
+      advantage grows with the size.
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Results --- cross-domain transfer (no retraining)}
+\begin{frame}{Results: cross-domain transfer, no retraining}
   \begin{columns}[c]
     \begin{column}{0.56\textwidth}\centering
       \includegraphics[width=\textwidth]{transfer.png}
@@ -559,44 +561,44 @@
       \emph{different} SAT families (small-world, AIM, quasigroups, planning);
       median MRIR, cap 200.
       \begin{itemize}
-        \item \textbf{GAT-Q-SAT stays $\ge$ MiniSat on 3/4} domains; plain
-              Graph-Q-SAT on \textbf{1/4}.
-        \item On the genuinely different domains \textbf{GAT beats MiniSat, Graph
-              drops below}.
-        \item $\Rightarrow$ attention improves \textbf{cross-domain generalisation}.
+        \item GAT-Q-SAT stays $\ge$ MiniSat on 3/4 domains, plain Graph-Q-SAT on 1/4.
+        \item On the genuinely different domains (quasigroup, planning) GAT-Q-SAT is
+              above MiniSat and Graph-Q-SAT below it.
+        \item Attention therefore improves also the behaviour outside the training
+              distribution.
       \end{itemize}
       {\scriptsize\color{gray} Preliminary: quasigroup (11)/planning (8) small; single seed.}
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Results --- fewer iterations $\neq$ less wall-clock time}
+\begin{frame}{Results: fewer iterations do not give less time}
   \centering
   \includegraphics[width=0.92\textwidth]{mrir_time.png}\\[1.5mm]
   \begin{columns}
     \begin{column}{0.92\textwidth}\footnotesize
-      Each decision is a \textbf{GNN forward}, so the iteration win (left) need not be a
-      time win (right): on \textbf{col$\to$col} GAT is fewer iters at the \emph{same}
-      $1.1$s, but on \textbf{random} it is $\sim$2$\times$ slower ($6.7$s vs $3.2$s).
-      Absolute: $1$--$7$s/problem vs MiniSat's \textbf{ms} --- exactly what the
-      \textbf{restricted heuristics} attack.
+      Each decision is a GNN forward pass, so a win in iterations (left) need not be a
+      win in time (right): on col$\to$col GAT does fewer iterations at the same $1.1$\,s,
+      while on random it is about twice as slow ($6.7$\,s against $3.2$\,s). In absolute
+      terms $1$--$7$\,s per problem against MiniSat's milliseconds, which is the point
+      the restricted heuristics attack.
     \end{column}
   \end{columns}
 \end{frame}
 
 % ================================================================ Conclusions
-\begin{frame}{Where the field went \& conclusions}
+\begin{frame}{Where the field went, and conclusions}
   \small
   \begin{itemize}
     \item Lineage: NeuroSAT $\to$ NeuroCore $\to$ NeuroComb $\to$ \textbf{NeuroBack}
-          (ICLR'24): a Graph \emph{Transformer}, \emph{offline} inference $\Rightarrow$
-          first wall-clock speed-ups on Kissat --- \textbf{validating the attention
-          direction} (GAT-Q-SAT).
+          (ICLR'24), a Graph \emph{Transformer} with \emph{offline} inference, which
+          gives the first wall-clock speed-ups on Kissat; the same attention direction
+          as GAT-Q-SAT.
     \item \textbf{Our results}: graph attention helps on structured problems
-          (colouring), \emph{growing with size}, and improves \textbf{cross-domain
-          robustness} (GAT $\ge$ MiniSat on 3/4 unseen domains vs 1/4 for Graph).
-    \item The fixed-size CNN (AlphaZeroSAT) cannot generalise across sizes ---
-          the motivation for the graph methods.
+          (colouring), with an advantage that grows with the size, and it also transfers
+          better (GAT $\ge$ MiniSat on 3/4 unseen domains, Graph on 1/4).
+    \item The fixed-size CNN (AlphaZeroSAT) cannot generalise across sizes, which is the
+          motivation for the graph methods.
   \end{itemize}
   \vspace{4mm}
   {\scriptsize Code, report and reproducible figures: \texttt{github.com/dmeoli/NeuroSAT}.}
