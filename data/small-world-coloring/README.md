@@ -8,15 +8,15 @@ graphs).
   <https://www.cs.ubc.ca/~hoos/SATLIB/Benchmarks/SAT/SW-GCP/>.
 - **Encoding:** 5-colourability of small-world graphs on 100 vertices → DIMACS
   CNF with **500 variables, 3100 clauses** (`c created by edge2cnf`). All SAT.
-- **Families `sw100-8-lp0-c5` … `sw100-8-lp8-c5`** (100 instances each) span a
-  *morphing* parameter: low indices are highly clustered ring-lattice / small-world
-  graphs (strong local structure), higher indices are progressively rewired toward
-  random. `sw100-8-p0-c5` (1 instance) is the fully-random reference.
+- **Families `sw100-8-lp0-c5` … `sw100-8-lp8-c5`** (100 instances each): the
+  graphs are ring lattices rewired with probability p = 2^-k for `lpk`, so `lp0`
+  (p = 1) is a random graph and `lp8` (p = 2^-8) is almost the lattice;
+  `sw100-8-p0-c5` (1 instance) is the lattice itself (p = 0).
 
 The spectrum makes the set suitable for an ablation of the attention advantage
-against the level of structure: Graph-Q-SAT and GAT-Q-SAT should diverge most on
-the strongly structured (low-index) families, and converge as the graphs are
-rewired toward random.
+against the level of structure (the most structured graphs being the
+high-index families, close to the lattice). The transfer study uses a sample of
+20 instances per level, in `../satlib/sw-lp0` ... `sw-lp8` and `sw-p0`.
 
 Split into train/val/test with the repo helper:
 
