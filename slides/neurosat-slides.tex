@@ -1,83 +1,58 @@
 \documentclass[aspectratio=169]{beamer}
 
-% --- minimalist theme matching the original deck (violet accent on white) ---
-\usetheme{default}
-\usefonttheme{professionalfonts}
-\setbeamertemplate{navigation symbols}{}
-\usepackage[T1]{fontenc}
+% The same talk, set with the lamalunga theme: the violet of the original
+% deck is the primary, every other color, size and spacing follows from it.
+\usetheme[aspect=beamer, primary=665094, sectionpage=none, spiral=false]{lamalunga}
 \usepackage{amsmath,amssymb}
-\usepackage{graphicx}
 \usepackage{booktabs}
 \graphicspath{{img/}{../img/}{../img/paper/}}
 
-\definecolor{tan}{RGB}{102,80,148}   % professional violet/lilac accent
-\definecolor{ink}{RGB}{40,40,40}
-\setbeamercolor{structure}{fg=tan}
-\setbeamercolor{frametitle}{fg=ink}
-\setbeamercolor{title}{fg=ink}
-\setbeamercolor{itemize item}{fg=tan}
-\setbeamercolor{itemize subitem}{fg=tan}
-% one shared horizontal margin for the body AND the header/footer, so they align
-\setbeamersize{text margin left=9mm,text margin right=9mm}
+% the names of the original colors, now computed by the theme
+\colorlet{tan}{lamalunga-primary}
+\colorlet{ink}{lamalunga-ink}
+\colorlet{gray}{lamalunga-muted}
 
-\setbeamerfont{frametitle}{size=\LARGE}
-\setbeamertemplate{frametitle}{\vspace{0.5mm}\insertframetitle\par}
-
-% running header (project left, author right) + footer (university left, page right)
-% on content frames; [plain] frames (title, dividers, thanks) suppress both.
-% Sits flush to the top edge: a short top inset, the names, then a hairline rule.
-\setbeamertemplate{headline}{%
-  \vskip1.2mm%
-  \hbox to \paperwidth{\hspace{9mm}{\scriptsize\color{tan}Neuro-symbolic approaches to the SAT problem}%
-        \hfill{\scriptsize\color{gray}Donato Meoli}\hspace{9mm}}%
-  \vskip0.6mm%
-  \hbox to \paperwidth{\hspace{9mm}{\color{tan!35}\rule{\dimexpr\paperwidth-18mm\relax}{0.4pt}}\hfill}%
-}
-\setbeamertemplate{footline}{%
-  \hbox to \paperwidth{\hspace{9mm}{\scriptsize\color{gray}University of Pisa}%
-        \hfill{\color{tan}\scriptsize\insertframenumber}\hspace{9mm}}\vskip1.8mm%
-}
-
+% a section divider: a box of the primary in the minor part of the golden
+% section of the page (38.2% at the right), inside the margins, with the
+% title centred in it; the content of the section, centred, in the major part
+\newlength\dividerbox \setlength\dividerbox{\goldenminor{\paperwidth}}
+\addtolength\dividerbox{-\lamalungahmargin}
+\newlength\dividerboxheight \setlength\dividerboxheight{\paperheight}
+\addtolength\dividerboxheight{-2\lamalungavmargin}
+\newlength\dividerleft \setlength\dividerleft{\goldenmajor{\paperwidth}}
+\addtolength\dividerleft{-2\lamalungahmargin}
 \newcommand{\sectiondivider}[3]{%
 \begin{frame}[plain]
-  \begin{columns}
-    \begin{column}{0.52\textwidth}
-      \raggedright
-      \small #2
-      \vfill
-      {\scriptsize\color{gray} #3\par}
-    \end{column}
-    \hfill
-    \begin{column}{0.48\textwidth}
-      \colorbox{tan}{\begin{minipage}[t][0.86\paperheight][c]{\textwidth}
-        \centering\color{white}\huge\textbf{#1}
-      \end{minipage}}
-    \end{column}
-  \end{columns}
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=north east, inner sep=0pt, minimum width=\dividerbox,
+      minimum height=\dividerboxheight, fill=lamalunga-primary,
+      text=lamalunga-on-primary, align=center,
+      text width=\dimexpr\dividerbox-2\fib{6}pt\relax,
+      font=\lamalungatitlefamily\fontseries{eb}\selectfont\modularsize{0.5}]
+      at ([xshift=-\lamalungahmargin, yshift=-\lamalungavmargin]current page.north east)
+      {\lamalunganohyphens #1};
+  \end{tikzpicture}%
+  \begin{minipage}[c][\dividerboxheight][c]{\dividerleft}
+    \vspace*{\fill}
+    #2
+    \vspace*{\fill}
+    {\modularsize{-1}\color{lamalunga-muted}#3\par}
+  \end{minipage}
 \end{frame}}
 
-\title{\textbf{Neuro-symbolic approaches to the SAT problem}}
+% a long title: a half step below the default, so that it fits the first
+% square of the spiral
+\setbeamerfont{title}{size=\modularsize{1.5}}
+
+\title{Neuro-symbolic Approaches to the SAT Problem}
+\subtitle{Intelligent Systems for Pattern Recognition\\ Reinforcement Learning}
 \author{Donato Meoli}
-\date{}
+\institute{University of Pisa}
+\date{Survey with coding project}
 
 \begin{document}
 
-% ==================================================================== title
-{\setbeamertemplate{footline}{}
-\begin{frame}[plain]
-  \vspace{1.2cm}
-  \hfill\begin{minipage}{0.72\textwidth}\raggedleft
-  {\color{tan}\rule{2pt}{2.2cm}}\hspace{3mm}
-  \begin{minipage}{0.82\textwidth}\raggedright
-    {\Huge Neuro-symbolic\\ approaches to\\ the SAT problem}\\[3mm]
-    {\small\color{tan}\textsc{Intelligent Systems for Pattern Recognition}}\\[0.8mm]
-    {\small\color{tan}\textsc{Reinforcement Learning}}\\[3.5mm]
-    {\normalsize University of Pisa}\\[1mm]
-    {\footnotesize\color{gray} survey with coding project}\\[6mm]
-    {\normalsize\textbf{Donato Meoli}}
-  \end{minipage}
-  \end{minipage}\hfill\,
-\end{frame}}
+\maketitle
 
 % ==================================================================== problem
 \begin{frame}{The SAT problem}
@@ -574,7 +549,9 @@
 
 \begin{frame}{Results: fewer iterations do not give less time}
   \centering
-  \includegraphics[width=0.92\textwidth]{mrir_time.png}\\[1.5mm]
+  % at most phi^{-3/2} of the text height, whatever its width
+  \includegraphics[width=0.92\textwidth, height=\goldenpower{-1.5}\textheight,
+    keepaspectratio]{mrir_time.png}\\[1.5mm]
   \begin{columns}
     \begin{column}{0.92\textwidth}\footnotesize
       Each decision is a GNN forward pass, so a win in iterations (left) need not be a
@@ -605,13 +582,10 @@
 \end{frame}
 
 % ================================================================ Thanks
-{\setbeamertemplate{footline}{}
-\begin{frame}[plain]
-  \centering\vfill
-  {\Huge\color{tan}\textbf{Thank you for your}}\\[5mm]
-  {\fontsize{40}{44}\selectfont\color{tan}\textbf{\textit{attention}!}}\\[14mm]
-  {\footnotesize\color{gray}\texttt{github.com/dmeoli/NeuroSAT}}
-  \vfill
-\end{frame}}
+\begin{frame}[standout]
+  Thank you for your \emph{attention}!
+  \par\vspace{\fib{8}pt}
+  {\modularsize{-0.5}\mdseries\texttt{github.com/dmeoli/NeuroSAT}}
+\end{frame}
 
 \end{document}

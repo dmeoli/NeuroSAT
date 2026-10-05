@@ -1,0 +1,3 @@
+# the lamalunga theme (github.com/dmeoli/lamalunga), from a local checkout
+ensure_path('TEXINPUTS', "$ENV{HOME}/GDrive/lamalunga//");
+$pdf_mode = 4;  # lualatex

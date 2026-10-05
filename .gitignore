@@ -13,6 +13,8 @@ __pycache__
 *.out
 *.toc
 *.synctex.gz
+*.fls
+*.fdb_latexmk
 
 # reference PDFs (kept locally, not committed)
 papers/*.pdf
