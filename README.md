@@ -2,6 +2,7 @@
 
 [![Graph-Q-SAT on Colab](https://img.shields.io/static/v1.svg?logo=google-colab&label=Colab&message=Graph%2FGAT-Q-SAT&color=4b2e83)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/graph_q_sat.ipynb)
 [![AlphaZeroSAT on Colab](https://img.shields.io/static/v1.svg?logo=google-colab&label=Colab&message=AlphaZeroSAT&color=7a4fb5)](https://colab.research.google.com/github/dmeoli/NeuroSAT/blob/master/notebooks/alphazero_sat.ipynb)
+[![Python Version](https://img.shields.io/badge/python-3.12%20%7C%203.13-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Neuro-symbolic approaches to the SAT problem**: learning branching heuristics
