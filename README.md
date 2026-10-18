@@ -21,8 +21,8 @@ reproduced exactly.
 
 | Model | Method | Framework | Where |
 |-------|--------|-----------|-------|
-| **AlphaZeroSAT** | Alpha(Go)Zero + MCTS over a CNN policy/value net [1] | PyTorch | [`AlphaZeroSAT/`](AlphaZeroSAT) |
-| **Graph-Q-SAT** | DQN + Graph Neural Network ([GNN](https://arxiv.org/abs/1806.01261)) [2] | PyTorch + PyG | [`GQSAT/`](GQSAT) |
+| **AlphaZeroSAT** | Alpha(Go)Zero + MCTS over a CNN policy/value net [[1]](#ref-1) | PyTorch | [`AlphaZeroSAT/`](AlphaZeroSAT) |
+| **Graph-Q-SAT** | DQN + Graph Neural Network ([GNN](https://arxiv.org/abs/1806.01261)) [[2]](#ref-2) | PyTorch + PyG | [`GQSAT/`](GQSAT) |
 | **GAT-Q-SAT** | Graph-Q-SAT + [Graph Attention](https://arxiv.org/abs/1710.10903) (this project) | PyTorch + PyG | [`GQSAT/`](GQSAT) |
 
 **Findings:**
@@ -134,10 +134,10 @@ Released under the MIT License, see [LICENSE](LICENSE).
 
 ## References
 
-[1] Wang, Fei, and Tiark Rompf, [*From Gameplay to Symbolic Reasoning: Learning SAT
+<a id="ref-1"></a>[1] Wang, Fei, and Tiark Rompf, [*From Gameplay to Symbolic Reasoning: Learning SAT
 Solver Heuristics in the Style of Alpha(Go) Zero*](https://arxiv.org/abs/1802.05340).
 
-[2] Kurin, Vitaly, et al., [*Can Q-Learning with Graph Networks Learn a Generalizable
+<a id="ref-2"></a>[2] Kurin, Vitaly, et al., [*Can Q-Learning with Graph Networks Learn a Generalizable
 Branching Heuristic for a SAT Solver?*](https://arxiv.org/abs/1909.11830).
 
 See [`papers/`](papers) for the full reference list (NeuroSAT, NeuroCore,
