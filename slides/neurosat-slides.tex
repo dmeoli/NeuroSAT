@@ -19,8 +19,22 @@
 % the links to the papers and to the code in the primary, so that one sees
 % they can be clicked; the internal links keep the color of the text
 \hypersetup{colorlinks=true, linkcolor=., urlcolor=lamalunga-primary}
+% the backgrounds (img/make_backgrounds.py of GQSAT), faded: a wall of clauses
+% with the AND and the OR of the CNF behind the title page, and neighborhoods
+% whose messages are weighted by attention behind every other frame
+\setbeamertemplate{background}{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \ifnum\value{page}>1
+      \node[anchor=center, inner sep=0pt, opacity=0.3] at (0.5\paperwidth,0.5\paperheight)
+        {\includegraphics[width=\paperwidth, height=\paperheight]{bg-content.pdf}};
+    \else
+      \node[anchor=center, inner sep=0pt, opacity=0.4] at (0.5\paperwidth,0.5\paperheight)
+        {\includegraphics[width=\paperwidth, height=\paperheight]{bg-cover.pdf}};
+    \fi
+  \end{tikzpicture}}
 % the figures of Graph-Q-SAT and GAT-Q-SAT are those of the note in GQSAT
-\graphicspath{{img/}{../GQSAT/report/img/}}
+\graphicspath{{img/}{../GQSAT/report/img/}{../GQSAT/slides/img/}}
 
 % \upd{...} marks a number that the Colab campaign will change, as in the note
 \newcommand{\upd}[1]{#1}
