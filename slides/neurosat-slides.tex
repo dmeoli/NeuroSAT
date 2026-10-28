@@ -732,17 +732,20 @@
 \end{frame}
 
 \begin{frame}{\T{Results: cross-domain transfer, with no retraining}{Risultati: transfer fra domini, senza riaddestramento}}
-  \begin{columns}[c]
-    \begin{column}{0.58\textwidth}\centering
-      \includegraphics[width=\textwidth]{transfer.png}
-    \end{column}
-    \begin{column}{0.42\textwidth}\footnotesize
-      \T{The coloring-trained models on the thirteen structured SATLIB families up to 2000
-      variables and 150000 clauses; cap 200, MRIR against the stronger MiniSat.}%
-      {I modelli addestrati sul coloring sulle tredici famiglie strutturate di SATLIB fino a
-      2000 variabili e 150000 clausole; cap 200, MRIR contro il MiniSat pi\`u forte.}\\[2mm]
-      \upd{\T{[On how many families each model is above MiniSat and above the other.]}%
-      {[Su quante famiglie ogni modello \`e sopra MiniSat e sopra l'altro.]}}
+  \centering
+  \includegraphics[width=\textwidth, height=\goldenpower{-1.5}\textheight,
+    keepaspectratio]{transfer.png}\\[1mm]
+  \begin{columns}
+    \begin{column}{0.96\textwidth}\footnotesize
+      \T{The coloring-trained models with no retraining, cap 200, MRIR against the stronger
+      MiniSat.}{I modelli addestrati sul coloring senza riaddestramento, cap 200, MRIR contro il
+      MiniSat pi\`u forte.}
+      \upd{\T{On the eleven informative families GAT-Q-SAT is above MiniSat on eight and
+      Graph-Q-SAT on six, and GAT-Q-SAT is the better of the two on eight; the seeds,
+      however, overlap on all the families but \texttt{jnh}.}%
+      {Sulle undici famiglie informative GAT-Q-SAT \`e sopra MiniSat su otto e Graph-Q-SAT
+      su sei, e GAT-Q-SAT \`e il migliore dei due su otto; i semi per\`o si sovrappongono su
+      tutte le famiglie tranne \texttt{jnh}.}}
     \end{column}
   \end{columns}
 \end{frame}
