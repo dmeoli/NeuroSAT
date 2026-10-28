@@ -26,13 +26,18 @@
   \begin{tikzpicture}
     \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
     \ifnum\value{page}>1
-      \node[anchor=center, inner sep=0pt, opacity=0.3] at (0.5\paperwidth,0.5\paperheight)
+      \node[anchor=center, inner sep=0pt, opacity=0.22] at (0.5\paperwidth,0.5\paperheight)
         {\includegraphics[width=\paperwidth, height=\paperheight]{bg-content.pdf}};
     \else
       \node[anchor=center, inner sep=0pt, opacity=0.4] at (0.5\paperwidth,0.5\paperheight)
         {\includegraphics[width=\paperwidth, height=\paperheight]{bg-cover.pdf}};
     \fi
   \end{tikzpicture}}
+% the title boxed (as with titles=boxed) on the title page only, so that it
+% stands out on the clauses of the background; the frame titles stay plain
+\ExplSyntaxOn
+\NewDocumentCommand \lamalungatitles { m } { \tl_gset:Nn \g_lamalunga_titles_tl {#1} }
+\ExplSyntaxOff
 % the figures of Graph-Q-SAT and GAT-Q-SAT are those of the note in GQSAT
 \graphicspath{{img/}{../GQSAT/report/img/}{../GQSAT/slides/img/}}
 
@@ -77,18 +82,20 @@
 \setbeamerfont{title}{size=\modularsize{1.5}}
 
 \ifdefined\italian
-  \title{Approcci neuro-simbolici al problema SAT}
+  \title{Approcci neuro-simbolici\\ al problema SAT}
 \else
-  \title{Neuro-symbolic Approaches to the SAT Problem}
+  \title{Neuro-symbolic Approaches\\ to the SAT Problem}
 \fi
 \subtitle{Intelligent Systems for Pattern Recognition\\ Reinforcement Learning}
-\author{Donato Meoli}
-\institute{Universit\`a di Pisa}
+\author{\textcolor{lamalunga-primary}{Donato Meoli}}
+\institute{\textcolor{lamalunga-accent}{Universit\`a di Pisa}}
 \date{\T{Survey with coding project}{Survey con progetto di codice}}
 
 \begin{document}
 
+\lamalungatitles{boxed}
 \maketitle
+\lamalungatitles{plain}
 
 % ==================================================================== problem
 \begin{frame}{\T{The SAT problem}{Il problema SAT}}
@@ -659,7 +666,7 @@
       \includegraphics[width=\textwidth]{thesis.png}
     \end{column}
     \begin{column}{0.42\textwidth}\footnotesize
-      \T{Mean MRIR at cap 500; light gray Graph-Q-SAT, dark gray GAT-Q-SAT.}{MRIR medio al cap 500; grigio chiaro Graph-Q-SAT, grigio scuro GAT-Q-SAT.}
+      \T{Mean MRIR at cap 500; light lilac Graph-Q-SAT, deep violet GAT-Q-SAT.}{MRIR medio al cap 500; lilla chiaro Graph-Q-SAT, viola scuro GAT-Q-SAT.}
       \begin{itemize}
         \item \T{Graph coloring: GAT-Q-SAT ahead, \upd{$2.70$ against $2.08$}.}%
               {Graph coloring: GAT-Q-SAT avanti, \upd{$2.70$ contro $2.08$}.}
