@@ -1,7 +1,7 @@
-# GQSAT / GATQSAT modern stack (PyTorch), targeting the LATEST versions.
+# GATQSAT modern stack (PyTorch), targeting the LATEST versions.
 #
 # - torch-scatter / torch-sparse REMOVED: the code now uses
-#   torch_geometric.utils.scatter (branch GQSAT@port/modern), dropping the
+#   torch_geometric.utils.scatter (branch GATQSAT@port/modern), dropping the
 #   hardest-to-install, CUDA/torch-version-locked dependencies.
 # - gymnasium (the maintained successor of gym): the code imports it with a
 #   gym fallback and builds the env directly (bypassing gym.make's env-checker),

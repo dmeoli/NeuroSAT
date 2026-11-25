@@ -19,7 +19,7 @@
 % the links to the papers and to the code in the primary, so that one sees
 % they can be clicked; the internal links keep the color of the text
 \hypersetup{colorlinks=true, linkcolor=., urlcolor=lamalunga-primary}
-% the backgrounds (img/make_backgrounds.py of GQSAT), faded: a wall of clauses
+% the backgrounds (img/make_backgrounds.py of GATQSAT), faded: a wall of clauses
 % with the AND and the OR of the CNF behind the title page, and neighborhoods
 % whose messages are weighted by attention behind every other frame
 \setbeamertemplate{background}{%
@@ -44,8 +44,8 @@
 \ExplSyntaxOn
 \NewDocumentCommand \lamalungatitles { m } { \tl_gset:Nn \g_lamalunga_titles_tl {#1} }
 \ExplSyntaxOff
-% the figures of Graph-Q-SAT and GAT-Q-SAT are those of the note in GQSAT
-\graphicspath{{img/}{../GQSAT/report/img/}{../GQSAT/slides/img/}}
+% the figures of Graph-Q-SAT and GAT-Q-SAT are those of the note in GATQSAT
+\graphicspath{{img/}{../GATQSAT/report/img/}{../GATQSAT/slides/img/}}
 
 % \upd{...} marks a number that the Colab campaign will change, as in the note
 \newcommand{\upd}[1]{#1}
@@ -801,7 +801,7 @@
   {\scriptsize \T{Code and slides:}{Codice e slide:}
   \href{https://github.com/dmeoli/NeuroSAT}{\texttt{github.com/dmeoli/NeuroSAT}};
   \T{the note on GAT-Q-SAT:}{la nota su GAT-Q-SAT:}
-  \href{https://github.com/dmeoli/GQSAT}{\texttt{github.com/dmeoli/GQSAT}}.}
+  \href{https://github.com/dmeoli/GATQSAT}{\texttt{github.com/dmeoli/GATQSAT}}.}
 \end{frame}
 
 % ================================================================ Thanks
